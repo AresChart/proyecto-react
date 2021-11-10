@@ -115,7 +115,62 @@ function crearArrayProcesos() {
   */
 export function eliminarPalabra(indicePagina) {
 
-    
+    // Indice de la palabra en la tabla que ve el usuario
+    let indiceTablaPaginas;
+    // Indice de la palabra en memoria
+    let indiceMemoria;
+
+    // Recorre tabla de paginas
+    for (let index = 0; index < TablaPaginas.length; index++) {
+        // Valida si coincide el registro con el indice a eliminar
+        if (TablaPaginas[index][0] == indicePagina) {
+            // Valida si la palabra esta en memoria virtual
+            if (/^MV/.test(TablaPaginas[index][1])) {
+                return alert('Memoria Virtual');
+            }
+            // Toma el indice de la palabar en el array que ve el usuario
+            indiceTablaPaginas = TablaPaginas[index][0];
+            // Toma el indice de la palabar en el array de memoria fisica
+            indiceMemoria      = TablaPaginas[index][1];
+            // Invoca el metodo para limpiar los espacios del bloque de memoria
+            limpiarArray(MemoriaFisica[indiceMemoria]);
+            // Invoca el metodo para limpiar los espacios del bloque de memoria
+            limpiarArray(TablaUsuario[indiceTablaPaginas]);
+
+            TablaPaginas[index][0] = "";
+            TablaPaginas[index][1] = "";
+
+            ///** Visualizacion de datos
+                console.log("Tabla Procesos");
+                console.log(TablaProcesos);
+                console.log("Memoria Fisica");
+                console.log(MemoriaFisica);
+                console.log("Memoria Virtual");
+                console.log(MemoriaVirtual);
+                console.log("Tabla Usuario");
+                console.log(TablaUsuario);
+                console.log("Tabla Paginas");
+                console.log(TablaPaginas);
+            //*/ 
+
+            break;
+
+        }
+    }
+}
+
+/**
+  * Limpia cada espacio del array, lo setea en ""
+  * @param {*} array array a limpiar
+  */
+function limpiarArray(array) {
+
+    // Recorre los espacios del array
+    for (let index = 0; index < array.length; index++) {
+        // setea el espacio en ""
+        array[index] = "";
+        
+    }
     
 }
 
@@ -347,7 +402,7 @@ function agregarTablaPaginas(posicionFisica) {
     // Recorre la tabla de paginas
     for (let index = 0; index < TablaPaginas.length; index++) {
         // Valida que exista datos en el array del usuario
-        if (TablaPaginas[index][0] != "" || TablaPaginas[index][0] == 0) {
+        if (TablaPaginas[index][0] != "" || parseInt(TablaPaginas[index][0]) == 0) {
             // Valida que falte el dato de la memoria fisica
             if ((TablaPaginas[index][1] == "")) {
                 // Asigna el valor
@@ -360,7 +415,7 @@ function agregarTablaPaginas(posicionFisica) {
             console.log("else"+ index);
         }
     }
-} // Falla cuando el primer valor es 0
+} // Falla cuando el primer valor es 0 (ya no)
 
 /**
  * Metodo que retorna un numero aleatorio de espacio disponible de la memoria fisica
