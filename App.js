@@ -1,21 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+/**
+ * Pagina principal que lanza las vistas correspondientes
+ * @author Kevin David Sanchez Solis
+ */
+import particionesView from './Views/PartitionsView';
+import mapaBits from './Views/AssignmentAlgorithmsView';
+import paginacion from './Views/PaginationView';
 
-export default function App() {
+/**
+ * Metodo que Gestiona la vista principal del aplicativo
+ * @returns La vista Principal del Programa
+ */
+const App = () => {
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  
+    //particionesView()
+    //mapaBits()
+    paginacion()
+
+  )
+
+
+  
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
+//-------------------------------Funciones--------------------------------------------------------------------
