@@ -1,5 +1,6 @@
 /**
  * Funcionalidades y variables de los algortimos de Paginacion
+ * 
  * @author Kevin David Sanchez Solis
  */
 
@@ -9,20 +10,31 @@ import React from 'react';
 
 //--------------------------------------Variables--------------------------------------------------------
 
+// Cantidad de procesos en memoria fisica
 let NumeroProcesos          = 7;
+// Cantidad de procesos en memoria virtual
 let CapacidadMemoriaVirtual = 4;
+// Cantidad total de paginas o procesos
 let NumeroPaginas           = NumeroProcesos + CapacidadMemoriaVirtual;
+// Cantidad de marcos disponibles en memoria fisica
 let EspaciosDisponibles     = NumeroProcesos;
+// Cantidad de bloques de datos disponibles en memoria virtual
 let EspaciosMemoriaVirtual  = CapacidadMemoriaVirtual;
+// Tamaño de cada marco o bloque de memoria
 export let TamañoBloque     = 3;
 
+// Inicializa el array de memoria fisica
 export let MemoriaFisica   = crearArrayProcesos();
+// Inicializa el array de memoria virtual
 export let MemoriaVirtual  = crearArrayMemoriaVirtual();
+// Inicializa el array de tabla de procesos
 export let TablaProcesos   = new Array();
+// Inicializa el array de tabla de procesos que ve el usuario
 export let TablaUsuario    = crearArrayUsuario();
+// Inicializa el array de tabla de paginas
 export let TablaPaginas    = crearTablaPaginas();
 
-//--------------------------------------Metodods---------------------------------------------------------
+//---------------------------------------Metodos---------------------------------------------------------
 
 /**
   * Metodo que inicializa el arreglo con los campos de los procesos
@@ -126,14 +138,18 @@ export function eliminarPalabra(indicePagina) {
         if (TablaPaginas[index][0] == indicePagina) {
             // Valida si la palabra esta en memoria virtual
             if (/^MV/.test(TablaPaginas[index][1])) {
-                return alert('Memoria Virtual');
+                let indice = TablaPaginas[index][1];
+                // Invoca el metodo que elimina una palabra que esta en memoria virtual
+                eliminarPalabraMemoriaVirtual(indice);
+
+            } else {
+                // Toma el indice de la palabar en el array de memoria fisica
+                indiceMemoria      = TablaPaginas[index][1];
+                // Invoca el metodo para limpiar los espacios del bloque de memoria
+                limpiarArray(MemoriaFisica[indiceMemoria]);
             }
             // Toma el indice de la palabar en el array que ve el usuario
             indiceTablaPaginas = TablaPaginas[index][0];
-            // Toma el indice de la palabar en el array de memoria fisica
-            indiceMemoria      = TablaPaginas[index][1];
-            // Invoca el metodo para limpiar los espacios del bloque de memoria
-            limpiarArray(MemoriaFisica[indiceMemoria]);
             // Invoca el metodo para limpiar los espacios del bloque de memoria
             limpiarArray(TablaUsuario[indiceTablaPaginas]);
 
@@ -152,15 +168,28 @@ export function eliminarPalabra(indicePagina) {
                 console.log("Tabla Paginas");
                 console.log(TablaPaginas);
             //*/ 
-
             break;
-
         }
     }
 }
 
 /**
+ * Elimina un proceso que se encuentra en memoria virtual
+ */
+function eliminarPalabraMemoriaVirtual(indice) {
+
+    // Separa los datos dentro del array de paginas
+    let posicion = indice.split('-');
+    // Ubica la posicion dentro de la memoria virtual 
+    let array = MemoriaVirtual[posicion[1]];
+    // Limpia el bloque de datos
+    limpiarArray(array);
+    
+}
+
+/**
   * Limpia cada espacio del array, lo setea en ""
+  * 
   * @param {*} array array a limpiar
   */
 function limpiarArray(array) {
@@ -176,8 +205,9 @@ function limpiarArray(array) {
 
 /**
   * Metodo que devuelve el item solicitado tanto en memoria fisica como en la del usuario
-  * @param {*} numPagina 
-  * @param {*} numPos 
+  * 
+  * @param {*} numPagina Pagina solicitada
+  * @param {*} numPos Item solicitado
   */
 export function solicitarItem (numPagina, numPos) {
 
@@ -187,17 +217,96 @@ export function solicitarItem (numPagina, numPos) {
     for (let index = 0; index < TablaPaginas.length; index++) {
         // Valida si el numero de la pagina coincide
         if (TablaPaginas[index][0] == numPagina) {
-            // Imprime el dato desde la memoria fisica
-            console.log("En memoria Fisica "+ MemoriaFisica[TablaPaginas[index][1]][numPos]);
+
+            if (/^MV/.test(TablaPaginas[index][1])) {
+            
+                // Trae el item solicitado
+                let item = solicitarItemMemoriaVirtual(TablaPaginas[index]);
+                // Imprime el dato desde la memoria fisica
+                console.log("En memoria Fisica "+ MemoriaFisica[item][numPos]);
+                break;
+
+            } else {
+                // Imprime el dato desde la memoria fisica
+                console.log("En memoria Fisica "+ MemoriaFisica[TablaPaginas[index][1]][numPos]);
+            }
             break;
         }
         
     }
+
+        ///** Visualizacion de datos
+        console.log("Tabla Procesos");
+        console.log(TablaProcesos);
+        console.log("Memoria Fisica");
+        console.log(MemoriaFisica);
+        console.log("Memoria Virtual");
+        console.log(MemoriaVirtual);
+        console.log("Tabla Usuario");
+        console.log(TablaUsuario);
+        console.log("Tabla Paginas");
+        console.log(TablaPaginas);
+        //*/ 
     
 }
 
 /**
+ * Trae un item que esta en memoria virtual
+ * 
+ * @param {*} indiceMV 
+ * 
+ * @returns 
+ */
+function solicitarItemMemoriaVirtual (indiceMV) {
+    
+    // Separa los datos dentro del array de paginas
+    let posicion = indiceMV[1].split('-');
+    // clona la informcion del array a subir
+    let arraySubir = Object.assign({}, MemoriaVirtual[posicion[1]]);
+    // Ubica la posicion dentro de la memoria virtual 
+    let arrayBajar;
+    // Variable que limita el while
+    let centinela = true;
+    // Almacena el numero aleatorio para bajar un array
+    let numero;
+    // Almacen ael indice en la tabla de paginas
+    let indiceTabla;
+
+    // Cicla mientras encuentra un array a bajar
+    while (centinela) {
+        // Genera numero aleatorio
+        numero = Math.floor(Math.random() * (NumeroProcesos - 0)) + 0;
+        // Recorre la tabla de paginas
+        for (let index = 0; index < TablaPaginas.length; index++) {
+            // Valida si el registro coincide con el aleatorio
+            if (TablaPaginas[index][1] == numero) {
+                // Clona la informacion del array a bajar
+                arrayBajar = Object.assign({}, MemoriaFisica[numero]);
+                // Inidice en tabla de paginas
+                indiceTabla = index;
+                // Sale del ciclo
+                centinela = false;
+                break;
+            }
+        }
+    }
+    
+    // Sube el array a memoria fisica
+    MemoriaFisica[numero] = Object.values(arraySubir);
+    // Actualiza el indice en la tabla de paginas
+    indiceMV[1] = numero;
+
+    // Baja el array a memoria virtual
+    MemoriaVirtual[posicion[1]] = Object.values(arrayBajar);
+    // Actualiza el indice en la tabla de paginas
+    TablaPaginas[indiceTabla][1] = "MV-"+posicion[1];
+
+    return numero;
+}
+
+/**
   * Metodo que crea un proceso y lo agrega a las tablas correspondientes
+  * 
   * @param {*} palabra palabra que representa el proceso 
   */
 export function crearProceso(palabra) {
@@ -236,6 +345,7 @@ export function crearProceso(palabra) {
 
 /**
  * Agrega un proceso haciendo uso de la memoria virtual
+ * 
  * @param {*} palabra 
  */
 function agregarPalabraMemoriaVirtual (palabra) {
@@ -244,12 +354,15 @@ function agregarPalabraMemoriaVirtual (palabra) {
     let numero = Math.floor(Math.random() * (NumeroProcesos - 0)) + 0;
     // Almacena los indices de memoria 
     let indices;
+    let array
     // Recorre la tabla de paginas
     for (let index = 0; index < TablaPaginas.length; index++) {
         // Valida si el registro coincide con el aleatorio
         if (TablaPaginas[index][1] == numero) {
             // Clona el registro de indices
             indices = Object.assign({}, TablaPaginas[index]);
+            // Referencia de los punteros
+            array = TablaPaginas[index];
             // Asigna un indicativo de que el bloque se traslado a memoria virtual
             TablaPaginas[index][1] = 'MV';
             break;
@@ -259,7 +372,7 @@ function agregarPalabraMemoriaVirtual (palabra) {
     }
 
     // Invoca el metodo que baja el bloque a memoria virtual
-    asignarMemoriaVirtual(indices);
+    asignarMemoriaVirtual(indices, array);
     // Invoca el metodo que asigna el proceso en el hueco que se deja
     asignarMemoriaFisica(palabra, indices[1]);
     
@@ -267,6 +380,7 @@ function agregarPalabraMemoriaVirtual (palabra) {
 
 /**
  * Asigna el valor del espacio libre en memoria fisica en la tabla de paginas
+ * 
  * @param {*} palabra Proceso a ingresar
  * @param {*} indice Posicion de bloque que se bajo a memoria virtual
  */
@@ -290,9 +404,10 @@ function asignarMemoriaFisica(palabra, indice) {
 
 /**
  * Baja a memoria virtual un proceso
+ * 
  * @param {*} indices indices que ocupa el proceso a bajar en las memorias
  */
-function asignarMemoriaVirtual (indices) {
+function asignarMemoriaVirtual (indices, array) {
     
     // Indica la posicion vacia dentro de la memoria virtual
     let posicion;
@@ -321,6 +436,10 @@ function asignarMemoriaVirtual (indices) {
         
     }
 
+    // Asigna en la posicion de la tabla de paginas el indice en memoria virtual
+    array[1] = 'MV-'+posicion;
+
+    // Indice que apunta al bloque en memoria virtual de los datos a pasar
     let pos = parseInt(indices[1], 10);
     // Recorre el bloque vacio encontrado
     for (let index = 0; index < MemoriaVirtual[0].length; index++) {
@@ -334,6 +453,7 @@ function asignarMemoriaVirtual (indices) {
 
 /**
  * Metodo que agrega el proceso en el array que ve el usuario
+ * 
  * @param {*} palabra que representa el proceso
  */
 function agregarPalabraTablaUsuarios(palabra) {
@@ -369,7 +489,9 @@ function agregarPalabraTablaUsuarios(palabra) {
 
 /**
  * Metodo que agrega la palabra del proceso en memoria fisica
+ * 
  * @param {*} palabra que representa el proceso
+ * 
  * @returns indice de la posicion en palabra en la que va o -1 si ya se termino
  */
 function agregarPalabraMemoriaFisica(palabra) { 
@@ -396,15 +518,16 @@ function agregarPalabraMemoriaFisica(palabra) {
 
 /**
  * Metodo que agrega la posicion usada en memoria fisica en la tabla de paginas
+ * 
  * @param {*} posicionFisica posicion que se consume en la memoria fisica
  */
 function agregarTablaPaginas(posicionFisica) {
     // Recorre la tabla de paginas
     for (let index = 0; index < TablaPaginas.length; index++) {
         // Valida que exista datos en el array del usuario
-        if (TablaPaginas[index][0] != "" || parseInt(TablaPaginas[index][0]) == 0) {
+        if (TablaPaginas[index][0] !== "" || parseInt(TablaPaginas[index][0]) == 0) {
             // Valida que falte el dato de la memoria fisica
-            if ((TablaPaginas[index][1] == "")) {
+            if ((TablaPaginas[index][1] === "")) {
                 // Asigna el valor
                 TablaPaginas[index][1] = posicionFisica;
                 // Sale de la ejecucion
@@ -415,10 +538,11 @@ function agregarTablaPaginas(posicionFisica) {
             console.log("else"+ index);
         }
     }
-} // Falla cuando el primer valor es 0 (ya no)
+}
 
 /**
  * Metodo que retorna un numero aleatorio de espacio disponible de la memoria fisica
+ * 
  * @returns Numero aleatorio
  */
 function validarMemoriaFisica() {
@@ -453,7 +577,7 @@ function validarMemoriaFisica() {
             numero = -1;
         }
     }
-    return numero;
+    return parseInt(numero, 10);
 }
 
 
