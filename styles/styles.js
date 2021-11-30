@@ -59,8 +59,7 @@ export const styles = StyleSheet.create({
       height:18,
     },
     item: {
-      padding: 2,
-      fontSize: 7,
+      fontSize: 10,
       height: 12,
       width:30,
       fontWeight: 'bold',
@@ -68,6 +67,7 @@ export const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
       borderColor: 'black',
+      flexDirection: 'column',
       borderWidth: 1
     },
 
