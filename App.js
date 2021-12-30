@@ -4,7 +4,8 @@
  */
 import particionesView from './Views/PartitionsView';
 import mapaBits from './Views/AssignmentAlgorithmsView';
-import paginacion from './Views/PaginationView';
+import pagination from './Views/PaginationView';
+import segmentation from './Views/SegmentationView';
 
 /**
  * Metodo que Gestiona la vista principal del aplicativo
@@ -16,14 +17,10 @@ const App = () => {
   
     //particionesView()
     //mapaBits()
-    paginacion()
+    //pagination()
+    segmentation()
 
   )
-
-
-  
-
 }
 
 export default App;
-//-------------------------------Funciones--------------------------------------------------------------------
