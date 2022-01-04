@@ -12,15 +12,15 @@ import TextI from '../componentes/TextInputComponent';
 function segmentation() {
 
     //Variable que almacena el indice de la pagina a eliminar
-    const [eliminarItem,   setEliminarItem]             = React.useState("");
+    const [eliminarItem,   setEliminarItem]                 = React.useState("");
     //Variable que almacena la palabra que corresponde al proceso creado
-    const [palabra,   setPalabra]                       = React.useState("");
-    //Variable que almacena la el numero de pagina que se solicita
-    const [paginaSolicitada,   setPaginaSolicitada]     = React.useState("");
+    const [palabra,   setPalabra]                           = React.useState("");
+    //Variable que almacena el numero de segmento que se solicita
+    const [segmentoSolicitado,   setSegmentoSolicitado]     = React.useState("");
     //Variable que almacena la posicion del item solicitado
-    const [posicionSolicitada,   setPosicionSolicitada] = React.useState("");
+    const [posicionSolicitada,   setPosicionSolicitada]     = React.useState("");
     //Variable que acciona el refresco de la tabla
-    const [refreshing, setRefreshing]                   = React.useState(false);
+    const [refreshing, setRefreshing]                       = React.useState(false);
 
     /**
      * Metodo que realiza las operaciones para el refresco de la tabla
@@ -63,20 +63,31 @@ function segmentation() {
     /**
      * Permite traer de la memoria fisica el dato solicitado
      */
-    // function solictarItem() {
-    //     // Invoca el metodo que trae el item solicitado
-    //     funciones.solicitarItem(paginaSolicitada, posicionSolicitada);
-    //     return onRefresh();
-    // }
+    function solictarItem() {
+
+        // Valida si el segmento existe
+        if (!funciones.TablaProcesos[segmentoSolicitado-1] || funciones.TablaProcesos[segmentoSolicitado-1][0] == '' ) {
+            return alert("No existe el segmento");
+        }
+        // Valida si el indice solicitado esta en el rango del segmento
+        else if (funciones.TablaProcesos[segmentoSolicitado-1][2] >= posicionSolicitada) {
+            // Invoca el metodo que trae el item solicitado
+            funciones.solicitarItem(segmentoSolicitado, posicionSolicitada);
+            return onRefresh();
+        }
+
+        return alert("El índice excede el tamaño del segmento");
+    }
 
     /**
-     * Permite eliminar o vaciar el bloque que contiene una palabra que se especifica por un indice
+     * Permite eliminar un proceso o segmento
      */
-    // function eliminarPalabra() {
-    //     // Invoca el metodo que elimina de los array la palabra indicada
-    //     funciones.eliminarPalabra(eliminarItem);
-    //     return onRefresh();
-    // }
+    function eliminarPalabra() {
+        // Invoca el metodo que elimina de los array la palabra indicada
+        funciones.eliminarPalabra(eliminarItem);
+        //Refresco de la tabla del algortimo de asignacion
+        return onRefresh();
+    }
       
 
     /**
@@ -105,9 +116,9 @@ function segmentation() {
             {/**View de los Input pagina y posicion solicitada*/}
             <View>
                 <TextI
-                    onChangeText={(val) => setPaginaSolicitada(val)}
-                    value={paginaSolicitada}
-                    placeholder="Pagina"
+                    onChangeText={(val) => setSegmentoSolicitado(val)}
+                    value={segmentoSolicitado}
+                    placeholder="Índice de segmento"
                     keyboardType='default' 
                 />
                 <TextI
@@ -129,7 +140,7 @@ function segmentation() {
                 <TextI
                     onChangeText={(val) => setEliminarItem(val)}
                     value={eliminarItem}
-                    placeholder="Indice de palabra a eliminar"
+                    placeholder="Índice del segmento a eliminar"
                     keyboardType='default' 
                 />
             </View>

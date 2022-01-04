@@ -16,7 +16,7 @@ let CantidadMemoria = 20;
 // Cantidad de marcos disponibles en memoria fisica
 export let EspaciosDisponibles     = CantidadMemoria;
 // Inicializa el array de memoria fisica
-export let MemoriaFisica   = crearArrayProcesos();
+export let MemoriaFisica   = crearArrayMemoria();
 // Inicializa el array de tabla de procesos
 export let TablaProcesos   = new Array();
 
@@ -27,7 +27,7 @@ export let TablaProcesos   = new Array();
   * 
   * @returns El arreglo de Procesos inicializado
   */
-function crearArrayProcesos() {
+ function crearArrayMemoria() {
 
     //arreglo de Procesos totales
     let array = new Array(CantidadMemoria);
@@ -42,28 +42,13 @@ function crearArrayProcesos() {
 }
 
 /**
-  * Limpia cada espacio del array, lo setea en ""
-  * 
-  * @param {*} array array a limpiar
-  */
-function limpiarArray(array) {
-
-    // Recorre los espacios del array
-    for (let index = 0; index < array.length; index++) {
-        // setea el espacio en ""
-        array[index] = "";
-        
-    }
-    
-}
-
-/**
-  * Metodo que crea un proceso y lo agrega a las tablas correspondientes
-  * 
-  * @param {*} palabra palabra que representa el proceso 
-  */
-export function crearProceso(palabra) {
-
+ * Metodo que crea un proceso y lo agrega a las tablas correspondientes
+ * 
+ * @param {*} palabra palabra que representa el proceso
+ *
+ * @returns Estado de la solicitud
+ */
+export function crearProceso(palabra) { // Falta Tabla de segmentos
     // Agrega la palabra en memoria fisica
     let estado = agregarPalabraMemoriaFisica(palabra);
 
@@ -71,15 +56,28 @@ export function crearProceso(palabra) {
     if (estado == -1) {
         return alert('No se encontro el espacio para almacenar la palabra en memoria fisica');
     }
-    // Agrega el proceso en la tabla de procesos global
-    TablaProcesos.push(palabra);
 
     // Visualizacion de datos
     console.log("Tabla de procesos");
     console.log(TablaProcesos);
     console.log("Memoria fisica");
     console.log(MemoriaFisica);
+}
 
+/**
+ * Agrega la palabra y el indice de inicio del segmento en el array de procesos
+ * 
+ * @param {*} palabra Palabra a guardar
+ * @param {*} indice Indice de inicio del segmento
+ */
+function agregarPalabraTablaProcesos(palabra, indice) {
+
+    // Agrega los datos del segmento a la tabla de procesos
+    TablaProcesos.push([
+        palabra,
+        indice,
+        palabra.length
+    ]); 
 }
 
 /**
@@ -99,6 +97,9 @@ function agregarPalabraMemoriaFisica(palabra) {
         // Devuelve estado negativo de la solicitud
         return -1;
     }
+
+    // Agrega el proceso en la tabla de procesos global
+    agregarPalabraTablaProcesos(palabra, estado);
 
     // Caso de parada de asignacion de la palabra
     let tope = 0;
@@ -152,4 +153,55 @@ function validarEspacioMemoriaFisica(tamaño) {
     }
 
     return -1;
+}
+
+/**
+ * Metodo que elimina de memoria un segmento
+ * 
+ * @param {*} segmento indice del segmento a eliminar de memoria
+ */
+export function eliminarPalabra(segmento) {
+    
+    // Indice de inicio del segmento
+    let inicio = TablaProcesos[segmento-1][1];
+    // Tamaño del segmento
+    let tope   = TablaProcesos[segmento-1][2];
+
+    // Bucle que recorre el segmento
+    while (tope != 0) {
+        // Limpia la posicion
+        MemoriaFisica[inicio] = [''];
+
+        // Actualiza las variables
+        inicio++;
+        tope--;
+    }
+
+    // Limpia los datos del segmento eliminado en la tabla de procesos
+    TablaProcesos[segmento-1] = ['', '','']
+
+    // Visualizacion de datos
+    console.log("Tabla de procesos");
+    console.log(TablaProcesos);
+    console.log("Memoria fisica");
+    console.log(MemoriaFisica);
+}
+
+/**
+ * Metodo que trae el item solicitado
+ *
+ * @param {*} segmento numero del segmento
+ * @param {*} indice indice dentro del segmento
+ *
+ * @returns Estado de la solicitud
+ */
+export function solicitarItem(segmento, indice) {
+
+    // Calcula la posicion en la que se encuentra el item en memoria fisica
+    let item = TablaProcesos[segmento-1][1] + (indice-1);
+    // Obtiene el item solicitado
+    item = MemoriaFisica[item];
+
+    // Retorna el valor solicitado
+    return alert("El item que solicito es: "+ item);
 }
