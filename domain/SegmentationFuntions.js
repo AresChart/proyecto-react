@@ -19,6 +19,8 @@ export let EspaciosDisponibles     = CantidadMemoria;
 export let MemoriaFisica   = crearArrayMemoria();
 // Inicializa el array de tabla de procesos
 export let TablaProcesos   = new Array();
+// Inicializa el array de tabla de procesos
+export let TablaDatos   = new Array();
 
 //---------------------------------------Metodos---------------------------------------------------------
 
@@ -60,6 +62,8 @@ export function crearProceso(palabra) { // Falta Tabla de segmentos
     // Visualizacion de datos
     console.log("Tabla de procesos");
     console.log(TablaProcesos);
+    console.log("Tabla de datos");
+    console.log(TablaDatos);
     console.log("Memoria fisica");
     console.log(MemoriaFisica);
 }
@@ -72,12 +76,17 @@ export function crearProceso(palabra) { // Falta Tabla de segmentos
  */
 function agregarPalabraTablaProcesos(palabra, indice) {
 
+    // Arreglo que almacena la palabra
+    let array = [];
+    // Recorre cada letra de la palabra
+    for (let index = 0; index < palabra.length; index++) {
+        // Agrega la letra en un espacio del arreglo
+        array.push(palabra.charAt(index));
+    }
+
     // Agrega los datos del segmento a la tabla de procesos
-    TablaProcesos.push([
-        palabra,
-        indice,
-        palabra.length
-    ]); 
+    TablaProcesos[TablaProcesos.length] = array; 
+    TablaDatos.push([indice, palabra.length]);
 }
 
 /**
@@ -101,6 +110,7 @@ function agregarPalabraMemoriaFisica(palabra) {
     // Agrega el proceso en la tabla de procesos global
     agregarPalabraTablaProcesos(palabra, estado);
 
+
     // Caso de parada de asignacion de la palabra
     let tope = 0;
 
@@ -121,7 +131,7 @@ function agregarPalabraMemoriaFisica(palabra) {
  *
  * @param {*} tamaño tamaño de la palabra a asignar
  *
- * @returns indice de inicio para asignar o estado negativo (1)
+ * @returns indice de inicio para asignar o estado negativo (-1)
  */
 function validarEspacioMemoriaFisica(tamaño) {
 
@@ -160,7 +170,7 @@ function validarEspacioMemoriaFisica(tamaño) {
  * 
  * @param {*} segmento indice del segmento a eliminar de memoria
  */
-export function eliminarPalabra(segmento) {
+export function eliminarSegmento(segmento) {
     
     // Indice de inicio del segmento
     let inicio = TablaProcesos[segmento-1][1];
@@ -171,7 +181,6 @@ export function eliminarPalabra(segmento) {
     while (tope != 0) {
         // Limpia la posicion
         MemoriaFisica[inicio] = [''];
-
         // Actualiza las variables
         inicio++;
         tope--;
@@ -183,6 +192,8 @@ export function eliminarPalabra(segmento) {
     // Visualizacion de datos
     console.log("Tabla de procesos");
     console.log(TablaProcesos);
+    console.log("Tabla de datos");
+    console.log(TablaDatos);
     console.log("Memoria fisica");
     console.log(MemoriaFisica);
 }

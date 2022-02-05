@@ -143,22 +143,22 @@ function paginacion() {
             </View>
 
             <View
-            style={{ flexDirection: 'row'}}>
-                <ProcessList
-                    procesos = {funciones.TablaUsuario}
-                />
-                <ProcessList
-                    procesos = {funciones.TablaPaginas}
-                />
-                <View
-                style={{ flexDirection: 'column', marginTop: 50, alignItems: "center"}}>
+                style={{ flexDirection: 'row'}}>
                     <ProcessList
-                        procesos = {funciones.MemoriaFisica}
+                        procesos = {funciones.TablaUsuario}
                     />
                     <ProcessList
-                        procesos = {funciones.MemoriaVirtual}
+                        procesos = {funciones.TablaPaginas}
                     />
-                </View>
+                    <View
+                    style={{ flexDirection: 'column', marginTop: 50, alignItems: "center"}}>
+                        <ProcessList
+                            procesos = {funciones.MemoriaFisica}
+                        />
+                        <ProcessList
+                            procesos = {funciones.MemoriaVirtual}
+                        />
+                    </View>
 
             </View>
 

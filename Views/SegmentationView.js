@@ -8,6 +8,8 @@ import { View , ScrollView} from 'react-native';
 import * as funciones from '../domain/SegmentationFuntions';
 import ButtonA from '../componentes/ButtonComponent';
 import TextI from '../componentes/TextInputComponent';
+import ProcessList from '../componentes/SegmentationComponents/ProcessListComponent';
+import PhysicalMemory from '../componentes/SegmentationComponents/PhysicalMemoryComponent';
 
 function segmentation() {
 
@@ -82,9 +84,9 @@ function segmentation() {
     /**
      * Permite eliminar un proceso o segmento
      */
-    function eliminarPalabra() {
+    function eliminarSegmento() {
         // Invoca el metodo que elimina de los array la palabra indicada
-        funciones.eliminarPalabra(eliminarItem);
+        funciones.eliminarSegmento(eliminarItem);
         //Refresco de la tabla del algortimo de asignacion
         return onRefresh();
     }
@@ -147,8 +149,18 @@ function segmentation() {
             {/**View del boton eliminar proceso - palabra */}
             <View>
                 <ButtonA 
-                    title   = "Eliminar palabra"
-                    onPress= { ()=>eliminarPalabra() }
+                    title   = "Eliminar segmento"
+                    onPress= { ()=>eliminarSegmento() }
+                />
+            </View>
+            {/**View tabla de procesos */}
+            <View
+                style={{ flexDirection: 'row'}}>
+                <ProcessList
+                    procesos = {funciones.TablaProcesos}
+                />
+                <PhysicalMemory
+                    procesos = {funciones.MemoriaFisica}
                 />
             </View>
         </ScrollView>

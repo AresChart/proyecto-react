@@ -68,7 +68,9 @@ export const styles = StyleSheet.create({
       justifyContent: "center",
       borderColor: 'black',
       flexDirection: 'column',
-      borderWidth: 1
+      borderWidth: .25,
+      textAlign: 'center',
+      borderBottomWidth: 0
     },
 
     itemFatList: {
