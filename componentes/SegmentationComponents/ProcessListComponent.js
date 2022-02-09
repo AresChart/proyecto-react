@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Text, View} from 'react-native';
+import { Text, View } from 'react-native';
 import { styles } from "../../styles/styles";
 import { DataTable } from 'react-native-paper';
 
@@ -19,34 +19,49 @@ function ProcessList(props) {
     return(
 
       <View
-      style={{
+        style={{
           flexDirection: 'row',
           alignContent: "center",
           alignItems: "center",
           justifyContent: "center",
           padding: 1,
           width:150 
-        }}>
- 
-          <DataTable id="tabla_salida" style={{flexDirection: 'column'}}>
-            <DataTable.Header style={{width:150}}>
-              <DataTable.Title>Pagina</DataTable.Title>
-              <DataTable.Title>Memoria</DataTable.Title>
-            </DataTable.Header>
-        
-            {array.map((row, index) => (
+        }}
+      >
+        <DataTable id="tabla_salida" style={{flexDirection: 'column'}}>
+          <DataTable.Header style={{width:150}}>
+            <DataTable.Title>Pagina</DataTable.Title>
+            <DataTable.Title>Memoria</DataTable.Title>
+          </DataTable.Header>
+          { array.map((row, index) => (
             <DataTable.Row style={{width:150, height: array[index]*20, minHeight: '40%' }}> 
-              <DataTable.Cell style={{width:75, height: 50, borderBottomWidth: 0}}>{index+1}</DataTable.Cell>
-              <DataTable.Cell style={{width:75,height: array[index]*20 , flexDirection: 'column'}}>
-              <View style={{flexDirection: 'column', margin: 0, backgroundColor: '#F3B9AC'}}>
-                {array[index].map((row, index1) =>(
-                  <Text style={styles.item}>{array[index][index1]}</Text>
-                ))}
-              </View>
+              <DataTable.Cell
+                style={{
+                  width:75,
+                  height: 50,
+                  borderBottomWidth: 0
+                }}>
+                  {index+1}
+              </DataTable.Cell>
+              <DataTable.Cell
+                style={{
+                  width:75,
+                  height: array[index]*20,
+                  flexDirection: 'column'
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    margin: 0
+                  }}>
+                    { array[index].map((row, index1) =>(
+                      <Text style={styles.item}> { array[index][index1] } </Text>
+                    ))}
+                </View>
               </DataTable.Cell>
             </DataTable.Row>
-            ))}
-          </DataTable > 
+          ))}
+        </DataTable > 
       </View>
 
     );

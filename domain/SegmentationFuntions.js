@@ -37,7 +37,7 @@ export let TablaDatos   = new Array();
     for (let index = 0; index < array.length; index++) {
         //inicializa la posicion en el arreglo en "".
         array.push();
-        array[index] = [''];
+        array[index] = ['', ''];
     }
 
     return array;
@@ -113,11 +113,15 @@ function agregarPalabraMemoriaFisica(palabra) {
 
     // Caso de parada de asignacion de la palabra
     let tope = 0;
+    // Color diferenciador del proceso
+    let color = generarColor();
 
     // Bucle para asignar las letras de la palabra en memoria fisica
     while (tope != palabra.length) {
         // Asigna letra de la palabra en el espacio del segmento
-        MemoriaFisica[estado] = palabra.charAt(tope);
+        MemoriaFisica[estado][0] = palabra.charAt(tope);
+        // Asigna el color para el proceso
+        MemoriaFisica[estado][1] = color;
         // Incrementa indices
         tope++;
         estado++;
@@ -145,7 +149,7 @@ function validarEspacioMemoriaFisica(tamaño) {
         // Bucle que busca si existe el espacio
         while (aux != 0) {
             // Valida si la posicion en la memoria fisica esta disponible
-            if (MemoriaFisica[indexAux] == '') {
+            if (MemoriaFisica[indexAux][0] == '') {
                 // Ajusta los auxiliares
                 aux--;
                 indexAux++;
@@ -173,21 +177,22 @@ function validarEspacioMemoriaFisica(tamaño) {
 export function eliminarSegmento(segmento) {
     
     // Indice de inicio del segmento
-    let inicio = TablaProcesos[segmento-1][1];
+    let inicio = TablaDatos[segmento-1][0];
     // Tamaño del segmento
-    let tope   = TablaProcesos[segmento-1][2];
+    let tope   = inicio+TablaDatos[segmento-1][1];
 
     // Bucle que recorre el segmento
     while (tope != 0) {
         // Limpia la posicion
-        MemoriaFisica[inicio] = [''];
+        MemoriaFisica[inicio] = ['', ''];
         // Actualiza las variables
         inicio++;
         tope--;
     }
 
     // Limpia los datos del segmento eliminado en la tabla de procesos
-    TablaProcesos[segmento-1] = ['', '','']
+    TablaProcesos.splice(segmento-1, 1);
+    TablaDatos.splice(segmento-1, 1);
 
     // Visualizacion de datos
     console.log("Tabla de procesos");
@@ -209,10 +214,50 @@ export function eliminarSegmento(segmento) {
 export function solicitarItem(segmento, indice) {
 
     // Calcula la posicion en la que se encuentra el item en memoria fisica
-    let item = TablaProcesos[segmento-1][1] + (indice-1);
+    let item = TablaDatos[segmento-1][0] + (indice-1);
     // Obtiene el item solicitado
-    item = MemoriaFisica[item];
+    item = MemoriaFisica[item][0];
 
     // Retorna el valor solicitado
     return alert("El item que solicito es: "+ item);
+}
+
+/**
+ * Genera color hexadecimal aleatorio
+ *
+ * @returns Color aleatorio
+ */
+function generarColor() {
+    // Array de opciones 
+    let hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F");
+    // Inicializa el string con el color
+    let color = "#";
+
+    // Recorre 6 posiciones que conforman el numero en hexadecimal
+    for (let i = 0; i < 6; i++) {
+        // Genera un indice aleatorio
+       let posarray = aleatorio(0,hexadecimal.length);
+        // obtiene la opcion seleccionada
+        color += hexadecimal[posarray];
+    }
+    return color;
+}
+
+/**
+ * Genera un numero aleatorio
+ *
+ * @param {*} inferior indice inferior de opciones
+ * @param {*} superior indice superior de opciones
+ *
+ * @returns numero aleatorio generado
+ */
+function aleatorio(inferior, superior) {
+    // Cantidad de posibilidades
+    let numPosibilidades = superior - inferior;
+    // Genera un numero aleatorio
+    let aleat = Math.random() * numPosibilidades;
+    // Toma el entero inferior
+    aleat = Math.floor(aleat);
+
+    return parseInt(inferior) + aleat;
 }

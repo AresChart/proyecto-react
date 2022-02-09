@@ -5,7 +5,7 @@
 
 //--------------------------------------Importaciones----------------------------------------------------
 
-//import React from 'react';
+import React from 'react';
 
 //--------------------------------------Variables--------------------------------------------------------
 //Variable que determina el tamaño de cada bloque que almacena los datos
@@ -197,21 +197,20 @@ export function crearArchivoContigua(nombre, tamaño) {
         //Valida que no se exceda del limite maximo de bloques
         if (tope <= 20) {
 
+            let indicador = 0;
             //Bucle que asigna en el mapa de bits los archivos
             for (let index = validacion; index < tope; index++) {
-        
                 //Bucle que recorre el bloque para asignar los datos 
                 for (let index1 = 0; index1 < mapaContigua[0].length; index1++) {
                     //Valida que el tamaño no sea 0
                     if (cantidad != 0) {
-                        mapaContigua[index][index1] = nombre;
+                        mapaContigua[index][index1] = nombre.charAt(indicador);
                         cantidad--;
-                    }else{
+                        indicador++;
+                    } else {
                         mapaContigua[index][index1] = "N/a";
                     }
-                    
                 }
-                
                 
             }
 
@@ -305,6 +304,8 @@ function validarEspacioContigua(tamaño, bloquesNecesarios) {
     let cantidad = tamaño;
     //Guarda el dato para el indice del bloque siguiente. (enlace)
     let siguiente = -1;
+    // Indicador para la palabra
+    let indicador = 0;
 
     //Valida si el espacio disponible existe
     if (validacion != -1) {
@@ -330,8 +331,9 @@ function validarEspacioContigua(tamaño, bloquesNecesarios) {
                     //Valida que el tamaño no sea 0
                     if (cantidad != 0) {
                         //Asiga el valor del archivo en el bloque de datos
-                        mapaEnlazada[index][index1] = nombre;
+                        mapaEnlazada[index][index1] = nombre.charAt(indicador);
                         cantidad--;
+                        indicador++;
                     }
                     //Valida que no existan mas caracteres que asignar.
                     if (cantidad == 0) {
@@ -511,6 +513,8 @@ function validarArchivoEnlazada (nombre) {
     let cantidad = tamaño;
     //Valida si hay espacio para guardar el archivo
     let validacion = validarEspacioIndexadaEnlazada(tamaño, bloquesTotales);
+    // Inidcador de la palabra
+    let indicador = 0;
     //Revisa que la validacion sea positiva
     if (validacion != -1) {
         //Devuelve las posiciones de los bloques vacios
@@ -524,8 +528,9 @@ function validarArchivoEnlazada (nombre) {
                     //Valida que todavia existan caracteres por asignar
                     if (cantidad != 0) {
                         //Asigna el caracter en la posicion
-                        mapaIndexadaEnlazada[posicionesDisponible[index]][index1] = nombre;
+                        mapaIndexadaEnlazada[posicionesDisponible[index]][index1] = nombre.charAt(indicador);
                         cantidad--;
+                        indicador++;
 
                     }else{
                         break;
@@ -749,6 +754,8 @@ function validarArchivoIndexadaEnlazada (nombre) {
     let validacion = validarEspacioIndexadaMultinivel(tamaño);
     //Indica la cantidad de datos que faltan por asignar
     let cantidadFaltante = tamaño;
+    // Indicador de la palabra
+    let indicador = 0;
 
     //Valida si se cumple con el espacio necesario
     if (validacion != -1) {
@@ -768,9 +775,10 @@ function validarArchivoIndexadaEnlazada (nombre) {
                     //Continua con el flujo del algoritmo
                     else{
                         //Asigna el dato en la posicion del bloque
-                        mapaIndexadaMultinivel[validacion[index+1]][index1] = nombre;
+                        mapaIndexadaMultinivel[validacion[index+1]][index1] = nombre.charAt(indicador);
                         //Disminuye el indicador 
                         cantidadFaltante--;
+                        indicador++;
                     }
                     
                 }
@@ -794,9 +802,10 @@ function validarArchivoIndexadaEnlazada (nombre) {
                         //Continua con la asignacion de datos
                         else{
                             //Asigna el dato en la posicion del bloque de datos
-                            mapaIndexadaMultinivel[validacion[index+1]][index1] = nombre;
+                            mapaIndexadaMultinivel[validacion[index+1]][index1] = nombre.charAt(indicador);
                             //Disminuye el contador de datos faltantes por asignar
                             cantidadFaltante--;
+                            indicador++;
                         }
                     }
                     //Se asigna el puntero al indice siguiente
@@ -840,9 +849,10 @@ function validarArchivoIndexadaEnlazada (nombre) {
                             //Continua con el flujo de asignacion de datos
                             else{
                                 //Asigna en el dato en la posicion en el bloque de datos
-                                mapaIndexadaMultinivel[validacion[index+1]][index2] = nombre;
+                                mapaIndexadaMultinivel[validacion[index+1]][index2] = nombre.charAt(indicador);
                                 //Disminuye el indice de datos que faltan por asinar
                                 cantidadFaltante--;
+                                indicador++;
                             }
                         }
                         //Valida si ya se cumplio la cantidad total de asignaciones
@@ -1033,12 +1043,14 @@ function validarArchivoIndexadaMultinivel (nombre) {
     let validacion = validarEspacioIndexadaCombinada(tamaño);
     //Indica la cantidad de datos que faltan por asignar
     let cantidadFaltante = tamaño;
+    // Indicador de la palabra
+    let indicador = 0;
 
     //Valida si se cumple con el espacio necesario
     if (validacion != -1) {
 
         // Llama al metodo que ejecuta el algortimo en su primer campo de dato
-        tipo1(nombre, 0, validacion, cantidadFaltante);
+        tipo1(nombre, 0, validacion, cantidadFaltante, indicador);
 
         //Ingresa el archivo en el arreglo de archivos creados
         archivosCreadosIndexadaCombinada.push(nombre);
@@ -1075,7 +1087,7 @@ function validarArchivoIndexadaMultinivel (nombre) {
  * @param {*} array Array de posiciones disponibles
  * @param {*} faltantes Cantidad de datos faltantes por asignar
  */
- function tipo1(nombre, indice, array, faltantes) {
+ function tipo1(nombre, indice, array, faltantes, indicador) {
     
     // Nodo de indices
     let inodo = array[indice];
@@ -1090,25 +1102,33 @@ function validarArchivoIndexadaMultinivel (nombre) {
         if (faltantes == 0) {
             break;
         }else{
-            mapaIndexadaCombinada[array[indice]][index1] = nombre;
+            mapaIndexadaCombinada[array[indice]][index1] = nombre.charAt(indicador);
             faltantes--;
+            indicador++;
         }
         
     }
-
+    // Valida si faltan campos para completar la palabra
     if (faltantes != 0) {
         indice++;
-        tipo2(nombre, indice, array, faltantes, inodo);
+        // Sigue con el recorrido 2
+        tipo2(nombre, indice, array, faltantes, inodo, indicador);
     }
 
  }
 
- function tipo2(nombre, indice, array, faltantes, inodo) {
-     
+/**
+ * Recorre en forma 2 el algoritmo
+ */
+function tipo2(nombre, indice, array, faltantes, inodo, indicador) {
+    // Incializa inodo
     mapaIndexadaCombinada[inodo][1] = array[indice]+1;
+    // Iniciliza el tope
     let tope = 0;
+    // Guarda el nodo indice
     let nodoIndice = array[indice];
     indice++;
+    // Recorre los bloques de memoria
     while (tope != 3) {
         
         mapaIndexadaCombinada[nodoIndice][tope] = array[indice]+1;
@@ -1118,34 +1138,38 @@ function validarArchivoIndexadaMultinivel (nombre) {
             if (faltantes == 0) {
                 break;
             }else{
-                mapaIndexadaCombinada[array[indice]][index] = nombre;
+                mapaIndexadaCombinada[array[indice]][index] = nombre.charAt(indicador);
                 faltantes--;
+                indicador++;
             }
             
         }
-
+        // Valida si ingreso la palabra completa
         if (faltantes == 0) {
             break;
         }else{
             indice++;
             tope++
         }
-        
     }
 
+    // Valida si faltan datos por ingresar
     if (faltantes != 0) {
-       
-        tipo3(nombre, indice, array, faltantes, inodo);
+        // Pasa al recorrido 3
+        tipo3(nombre, indice, array, faltantes, inodo, indicador);
     }
 
- }
+}
 
- function tipo3(nombre, indice, array, faltantes, inodo) {
-     
+/**
+ * Forma 3 de recorrer el algoritmo
+ */
+ function tipo3(nombre, indice, array, faltantes, inodo, indicador) {
+    // Asigna dato
     mapaIndexadaCombinada[inodo][2] = array[indice]+1;
     //indice++;
-
-    tipo1(nombre, indice, array, faltantes);
+    // Pasa al recorrido 1
+    tipo1(nombre, indice, array, faltantes, indicador);
 
  }
 
@@ -1222,12 +1246,12 @@ function validarArchivoIndexadaMultinivel (nombre) {
 
  }
 
- /**
+/**
  * Metodo que elimina un archivo indicado en el algortimos Indexada-Multinivel
  * @param {*} nombre Nombre del archivo
  * @param {*} tamaño Tamaño del archivo
  */
- function eliminarArchivoIndexadaCombinada (nombre, tamaño) {
+function eliminarArchivoIndexadaCombinada (nombre, tamaño) {
 
     //Variable que almacena el resultado de la validacion
     let validarArchivo = validarArchivoIndexadaCombinada(nombre);
@@ -1266,7 +1290,7 @@ function validarArchivoIndexadaMultinivel (nombre) {
     console.log("Posiciones (Indexada-Combinada)");
     console.log(posicionesIndexadaCombinada);
     //*/ 
- }
+}
 
  /**
  * Metodo que valida si el archivo existe
@@ -1280,7 +1304,73 @@ function validarArchivoIndexadaCombinada (nombre) {
         if (archivosCreadosIndexadaCombinada[index] == nombre) {
             return index;
         }
-        
     }
     return -1;
 } 
+
+//--------------------------------- Metodos generales----------------------------------------------
+
+/**
+ * Limpia los discos
+ */
+export function limpiarDiscos() {
+
+    //--------------------------------Asignacion Contigua------------------------------------------------
+        //Arreglo que almacena los archivos creados
+        archivosCreadosContigua  = [];
+        //Arreglo que almacena el tamaño de caracteres de los archivos creados
+        tamañoCaracteresContigua = [];
+        //Arreglo que funciona como mapa de bits
+        mapaContigua = crearMapa();
+        //Arreglo con los indices de inicio de cada archivo
+        inicioContigua = [];
+    //--------------------------------Asignacion Enlazada------------------------------------------------
+        //Arreglo que almacena los archivos creados
+        archivosCreadosEnlazada  = [];
+        //Arreglo que almacena el tamaño de caracteres de los archivos creados
+        tamañoCaracteresEnlazada = [];
+        //Arreglo que funciona como mapa de bits
+        mapaEnlazada = crearMapa();
+        //Arreglo con los indices de inicio de cada archivo
+        inicioEnlazada = [];
+    //---------------------------Asignacion Indexada Enlazada-------------------------------------------
+        //Arreglo que almacena los archivos creados
+        archivosCreadosIndexadaEnlazada  = [];
+        //Arreglo que almacena el tamaño de caracteres de los archivos creados
+        tamañoCaracteresIndexadaEnlazada = [];
+        //Arreglo que funciona como mapa de bits
+        mapaIndexadaEnlazada = crearMapa();
+        //Arreglo con los indices de inicio de cada archivo
+        inicioIndexadaEnlazada = [];
+        //Arreglo con las posiciones ocupadas por cada archivo
+        posicionesIndexadaEnlazada = [];
+    //--------------------------Asignacion Indexada-Multinivel------------------------------------------
+        //Arreglo que almacena los archivos creados
+        archivosCreadosIndexadaMultinivel  = [];
+        //Arreglo que almacena el tamaño de caracteres de los archivos creados
+        tamañoCaracteresIndexadaMultinivel = [];
+        //Arreglo que funciona como mapa de bits
+        mapaIndexadaMultinivel = crearMapa();
+        //Arreglo con los indices de inicio de cada archivo
+        inicioIndexadaMultinivel = [];
+        //Arreglo con las posiciones ocupadas por cada archivo
+        posicionesIndexadaMultinivel = [];
+   //--------------------------Asignacion Indexada-Combinada------------------------------------------
+        //Arreglo que almacena los archivos creados
+        archivosCreadosIndexadaCombinada  = [];
+        //Arreglo que almacena el tamaño de caracteres de los archivos creados
+        tamañoCaracteresIndexadaCombinada  = [];
+        //Arreglo que funciona como mapa de bits
+        mapaIndexadaCombinada  = crearMapa();
+        //Arreglo con los indices de inicio de cada archivo
+        inicioIndexadaCombinada  = [];
+        //Arreglo con las posiciones ocupadas por cada archivo
+        posicionesIndexadaCombinada  = [];
+}
+
+/**
+ * Muestra la informacion del disco seleccionado
+ */
+export function informacionDisco(disco) {
+    
+}

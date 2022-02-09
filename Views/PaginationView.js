@@ -54,7 +54,7 @@ function paginacion() {
         // Valida que la palabra sea maximo del tamaño del bloque
         if (palabra.length <= funciones.TamañoBloque) {
             // Invoca al metodo crear proceso
-            funciones.crearProceso(palabra);
+            funciones.crearProceso(palabraClone);
             //Refresco de la tabla del algortimo de asignacion
             return onRefresh();
         }
