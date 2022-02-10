@@ -51,6 +51,9 @@ function paginacion() {
         if (palabraClone == "") {          
             return alert("No se admiten Palabras vacias");
         }
+        if (funciones) {
+            
+        }
         // Valida que la palabra sea maximo del tamaño del bloque
         if (palabra.length <= funciones.TamañoBloque) {
             // Invoca al metodo crear proceso
@@ -65,6 +68,18 @@ function paginacion() {
      * Permite traer de la memoria fisica el dato solicitado
      */
     function solictarItem() {
+
+        // Valida que la pagina y posicion sean validas
+        if (paginaSolicitada == "" && posicionSolicitada == "") {
+            return alert('Ingrese datos para solictar item');
+        }
+        // Valida si los campos estan vacios
+        else if (paginaSolicitada == '' ) {
+            return alert('Ingrese página solictada');
+        } else if (posicionSolicitada == '') {
+            return alert('Ingrese posición dentro de la pagina solicitada');
+        }
+
         // Invoca el metodo que trae el item solicitado
         funciones.solicitarItem(paginaSolicitada, posicionSolicitada);
         return onRefresh();
@@ -74,6 +89,12 @@ function paginacion() {
      * Permite eliminar o vaciar el bloque que contiene una palabra que se especifica por un indice
      */
     function eliminarPalabra() {
+
+        // Valida que la pagina y posicion sean validas
+        if (eliminarItem == "") {
+            return alert('Ingrese búmero de proceso a eliminar');
+        }
+
         // Invoca el metodo que elimina de los array la palabra indicada
         funciones.eliminarPalabra(eliminarItem);
         return onRefresh();
@@ -109,13 +130,13 @@ function paginacion() {
                     onChangeText={(val) => setPaginaSolicitada(val)}
                     value={paginaSolicitada}
                     placeholder="Pagina"
-                    keyboardType='default' 
+                    keyboardType='numeric' 
                 />
                 <TextI
                     onChangeText={(val) => setPosicionSolicitada(val)}
                     value={posicionSolicitada}
                     placeholder="Posicion"
-                    keyboardType='default' 
+                    keyboardType='numeric' 
                 />
             </View>
             {/**View del boton realizar solicitud */}

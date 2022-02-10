@@ -130,6 +130,9 @@ function crearArrayMemoriaVirtual() {
   */
 export function eliminarPalabra(indicePagina) {
 
+    // Ingresa registro al log
+    paginationLog += 'Se solicita eliminar el proceso número '+ indicePagina +'\n';
+
     // Indice de la palabra en la tabla que ve el usuario
     let indiceTablaPaginas;
     // Indice de la palabra en memoria
@@ -141,6 +144,7 @@ export function eliminarPalabra(indicePagina) {
         if (TablaPaginas[index][0] == indicePagina) {
             // Valida si la palabra esta en memoria virtual
             if (/^MV/.test(TablaPaginas[index][1])) {
+                
                 let indice = TablaPaginas[index][1];
                 // Invoca el metodo que elimina una palabra que esta en memoria virtual
                 eliminarPalabraMemoriaVirtual(indice);
@@ -150,6 +154,8 @@ export function eliminarPalabra(indicePagina) {
                 indiceMemoria      = TablaPaginas[index][1]-1;
                 // Invoca el metodo para limpiar los espacios del bloque de memoria
                 limpiarArray(MemoriaFisica[indiceMemoria]);
+                // Ingresa registro al log
+                paginationLog += ' Se elimina el proceso del espacio '+ parseInt(indiceMemoria+1) +' de la memoria fisica\n';
             }
             // Toma el indice de la palabar en el array que ve el usuario
             indiceTablaPaginas = TablaPaginas[index][0]-1;
@@ -159,6 +165,9 @@ export function eliminarPalabra(indicePagina) {
             TablaPaginas[index][0] = "";
             TablaPaginas[index][1] = "";
             EspaciosDisponibles++;
+
+            // Ingresa registro al log
+            paginationLog += ' Se liberan los espacios ocupados por el proceso en la tabla de páginas \n';
 
             ///** Visualizacion de datos
                 console.log("Tabla Procesos");
@@ -171,6 +180,8 @@ export function eliminarPalabra(indicePagina) {
                 console.log(TablaUsuario);
                 console.log("Tabla Paginas");
                 console.log(TablaPaginas);
+                console.log("Log");
+                console.log(paginationLog);
             //*/ 
             break;
         }
@@ -189,6 +200,8 @@ function eliminarPalabraMemoriaVirtual(indice) {
     // Limpia el bloque de datos
     limpiarArray(array);
     
+    // Ingresa registro al log
+    paginationLog += ' Se elimina el proceso del espacio '+ parseInt(posicion[1])+1 +' de la memoria virtual\n';
 }
 
 /**
@@ -432,6 +445,8 @@ function agregarPalabraMemoriaVirtual (palabra) {
         // Agrega el item del proceso en el espacio de memoria
         MemoriaFisica[parseInt(indices[1])-1][index] = palabra.charAt(index);
     }
+
+    EspaciosMemoriaVirtual--;
 
 }
 
