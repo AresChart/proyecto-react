@@ -15,52 +15,62 @@ var tamañoBloque = 3;
         var archivosCreadosContigua  = [];
         //Arreglo que almacena el tamaño de caracteres de los archivos creados
         var tamañoCaracteresContigua = [];
-        //Arreglo que funciona como mapa de bits
-        export var mapaContigua = crearMapa();
         //Arreglo con los indices de inicio de cada archivo
         var inicioContigua = [];
+        //Arreglo que funciona como mapa de bits
+        export var mapaContigua = crearMapa();
+        // Log para disco de memoria Contigua
+        export var logContigua = '';
     //--------------------------------Asignacion Enlazada------------------------------------------------
         //Arreglo que almacena los archivos creados
         var archivosCreadosEnlazada  = [];
         //Arreglo que almacena el tamaño de caracteres de los archivos creados
         var tamañoCaracteresEnlazada = [];
-        //Arreglo que funciona como mapa de bits
-        export var mapaEnlazada = crearMapa();
         //Arreglo con los indices de inicio de cada archivo
         var inicioEnlazada = [];
+        //Arreglo que funciona como mapa de bits
+        export var mapaEnlazada = crearMapa();
+        // Log para disco de memoria Enlazada
+        export var logEnlazada = '';
     //---------------------------Asignacion Indexada Enlazada-------------------------------------------
         //Arreglo que almacena los archivos creados
         var archivosCreadosIndexadaEnlazada  = [];
         //Arreglo que almacena el tamaño de caracteres de los archivos creados
         var tamañoCaracteresIndexadaEnlazada = [];
-        //Arreglo que funciona como mapa de bits
-        export var mapaIndexadaEnlazada = crearMapa();
         //Arreglo con los indices de inicio de cada archivo
         var inicioIndexadaEnlazada = [];
         //Arreglo con las posiciones ocupadas por cada archivo
         var posicionesIndexadaEnlazada = [];
+        //Arreglo que funciona como mapa de bits
+        export var mapaIndexadaEnlazada = crearMapa();
+        // Log para disco de memoria Indexada-Enlazada
+        export var logIndexadaEnlazada = '';
     //--------------------------Asignacion Indexada-Multinivel------------------------------------------
         //Arreglo que almacena los archivos creados
         var archivosCreadosIndexadaMultinivel  = [];
         //Arreglo que almacena el tamaño de caracteres de los archivos creados
         var tamañoCaracteresIndexadaMultinivel = [];
-        //Arreglo que funciona como mapa de bits
-        export var mapaIndexadaMultinivel = crearMapa();
         //Arreglo con los indices de inicio de cada archivo
         var inicioIndexadaMultinivel = [];
         //Arreglo con las posiciones ocupadas por cada archivo
         var posicionesIndexadaMultinivel = [];
+        //Arreglo que funciona como mapa de bits
+        export var mapaIndexadaMultinivel = crearMapa();
+        // Log para disco de memoria Indexada-Multinivel
+        export var logIndexadaMultinivel = '';
    //--------------------------Asignacion Indexada-Combinada------------------------------------------
         //Arreglo que almacena los archivos creados
         var archivosCreadosIndexadaCombinada  = [];
         //Arreglo que almacena el tamaño de caracteres de los archivos creados
         var tamañoCaracteresIndexadaCombinada  = [];
-        //Arreglo que funciona como mapa de bits
-        export var mapaIndexadaCombinada  = crearMapa();
         //Arreglo con los indices de inicio de cada archivo
         var inicioIndexadaCombinada  = [];
         //Arreglo con las posiciones ocupadas por cada archivo
         var posicionesIndexadaCombinada  = [];
+        //Arreglo que funciona como mapa de bits
+        export var mapaIndexadaCombinada  = crearMapa();
+        // Log para disco de memoria Indexada-combinada
+        export var logIndexadaCombinada = '';
 
 //--------------------------------------Metodos----------------------------------------------------------
 
@@ -70,14 +80,12 @@ var tamañoBloque = 3;
  * @param {*} tamaño Tamaño en caracteres del archivo a Crear
  */
 export function crearArchivo(nombre, tamaño) {
-
     //Llama a los metodos de creacion de archivos de los diferentes algortimos
     crearArchivoContigua(nombre, tamaño);
     crearArchivoEnlazada(nombre, tamaño);
     crearArchivoIndexadaEnlazada(nombre, tamaño);
     crearArchivoIndexadaMultinivel(nombre, tamaño);
     crearArchivoIndexadaCombinada(nombre, tamaño);
-   
 }
 
 /**
@@ -124,12 +132,18 @@ export function eliminarArchivo(nombre, tamaño) {
  */
 function eliminarArchivoContigua(nombre, tamaño) {
 
+    // Ingresa registro al log
+    logContigua += 'Se solicita eliminar del disco la palabra: '+ nombre +'\n';
+
     //Variable que almacena el resultado de la validacion
     let validarArchivo = validarArchivoContigua(nombre);
     //Indica el bloque de inicio del archivo
     let indice = inicioContigua[validarArchivo];
     //Indica cuantos bloques requirio el archivo
     let tope = Math.ceil(tamañoCaracteresContigua[validarArchivo]/3);
+
+    // Ingresa registro al log
+    logContigua += ' Se obtiene posición de memoria de inicio de la palabra. \n';
 
     //Valida que el archivo si exista
     if (validarArchivo != -1) {
@@ -146,15 +160,19 @@ function eliminarArchivoContigua(nombre, tamaño) {
         //Elimina los datos del archivo a eliminar del arreglo de posicion inicial del archivo
         inicioContigua.splice(validarArchivo,1);
 
+        // Ingresa registro al log
+        logContigua += ` Se pone en mapa de bits como disponible los bloques del ${parseInt(validarArchivo+1)} al ${parseInt(indice+tope+1)}, que fuerón liberados. \n`;
+
     }else{
+        // Ingresa registro al log
+        logContigua += ' No se encontró la palabra en disco. \n';
         console.log("No existe el archivo que quiere eliminar");
     }
 
-    /**
-    console.log("mapa (Contigua)");
-    console.log(mapaContigua);
-    */
-    
+    // console.log("mapa (Contigua)");
+    // console.log(mapaContigua);
+    // console.log("Log");
+    console.log(logContigua);
 }
 
 /**
@@ -163,6 +181,9 @@ function eliminarArchivoContigua(nombre, tamaño) {
  * @returns indice del archivo. -1 Si no lo encuentra
  */
 function validarArchivoContigua (nombre) {
+
+    // Ingresa registro al log
+    logContigua += 'Se valida que la palabra si este en el disco. \n';
 
     //Bucle que recorre el arry de archivos creados
     for (let index = 0; index < archivosCreadosContigua.length; index++) {
@@ -182,6 +203,9 @@ function validarArchivoContigua (nombre) {
  * @param {*} tamaño Tamaño del archivo a crear
  */
 export function crearArchivoContigua(nombre, tamaño) {
+
+    // Ingresa registro al log
+    logContigua += 'Se solicita agregar en disco la palabra: '+ nombre +'\n';
 
     //Varible con el calculo de cuantos bloques se necesitan para crear el archivo
     let bloquesNecesarios = Math.ceil(tamaño/tamañoBloque);
@@ -214,6 +238,13 @@ export function crearArchivoContigua(nombre, tamaño) {
                 
             }
 
+            // Ingresa registro al log
+            logContigua += ' Se asigna la palabra de forma contigua en disco. \n';
+            // Ingresa registro al log
+            logContigua += ' Se marcan como ocupados en mapa de bits los espacios ocupados en memoria \n';
+            // Ingresa registro al log
+            logContigua += ' Se relaciona en tabla de procesos que el proceso comienza en el bloque '+ parseInt(validacion+1) +'\n';
+
             //Ingresa el archivo en el arreglo de archivos creados
             archivosCreadosContigua.push(nombre);
             //Ingresa el tamaño del archivo en el arreglo de tamaños de archivos creados
@@ -223,23 +254,30 @@ export function crearArchivoContigua(nombre, tamaño) {
             
 
         }else{
+            // Ingresa registro al log
+            logContigua += ' Se notifica que no existe la cantidad de bloques necesarios para almacenar la palabra. \n';
             console.log("El tamaño supera los bloques");
         }
 
     }else{
+        // Ingresa registro al log
+        logContigua += ' Se notifica que no existe el espacio contiguo para almacenar la palabra. \n';
         console.log("No se encontro espacio para agregar el archivo");
     }
 
-    /** 
-    console.log("mapa (Contigua)");
-    console.log(mapaContigua);
-    console.log("creados (Contigua)");
-    console.log(archivosCreadosContigua);
-    console.log("tamaño (Contigua)");
-    console.log(tamañoCaracteresContigua);
-    console.log("inicio (Contigua)");
-    console.log(inicioContigua);
-    */
+    
+    // console.log("mapa (Contigua)");
+    // console.log(mapaContigua);
+    // console.log("creados (Contigua)");
+    // console.log(archivosCreadosContigua);
+    // console.log("tamaño (Contigua)");
+    // console.log(tamañoCaracteresContigua);
+    // console.log("inicio (Contigua)");
+    // console.log(inicioContigua);
+    console.log('log');
+    console.log(logContigua);
+    
+    
     
 }
 
@@ -251,6 +289,9 @@ export function crearArchivoContigua(nombre, tamaño) {
  *          Si no se puede agregar retorna -1
  */
 function validarEspacioContigua(tamaño, bloquesNecesarios) {
+
+    // Ingresa registro al log
+    logContigua += ' Se valida con el mapa de bits si existe espacio para almacenar la palabra. \n';
 
     //Variable que permite saber si la cantidad de bloques que se necesita se encuentra
     let contador = 0;
@@ -274,6 +315,8 @@ function validarEspacioContigua(tamaño, bloquesNecesarios) {
         }
         //Si se encuentra el espacio, se retorna el indice de inicio
         if (contador == bloquesNecesarios) {
+            // Ingresa registro al log
+            logContigua += ' Se notifica que existe el espacio. \n';
             return centinela;
         }
         

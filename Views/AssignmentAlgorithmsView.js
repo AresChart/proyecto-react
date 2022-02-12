@@ -19,11 +19,11 @@
  const mapaBits = () => {
  
     //Variable que almacena el nombre del archivo a crear o eliminar
-    const [nombreArchivo,   setnombreArchivo]       = React.useState("C");
+    const [nombreArchivo,   setnombreArchivo]       = React.useState("");
     //Variable que almacena el tamaño de caracteres del archivo a crear
     const [tamañoCaracteres,   settamañoCaracteres] = React.useState(5);
     //Variable que identifica el Tipo de algortimo a proyectar
-    const [algoritmo, setAlgoritmo]                 = React.useState("Indexada-Combinada");
+    const [algoritmo, setAlgoritmo]                 = React.useState("Contigua");
     //Variable que acciona el refresco de la tabla
     const [refreshing, setRefreshing]               = React.useState(false);
     //Lista de los algortimos de asignacion de espacio
@@ -56,8 +56,16 @@
      * Metodo que llama al metodo de la logica que crea un archivo
      */
     const crearArchivo = () => {
+
+        // Variable auxiliar 
+        let nombreArchivoClone = nombreArchivo.trim();  
+
+        // Valida que la palabra no este vacia
+        if (nombreArchivoClone == "") {          
+            return alert("No se admiten Palabras vacias");
+        }
         //Llamado al metodo de la logica que crea un archivo
-        funciones.crearArchivo(nombreArchivo, tamañoCaracteres);
+        funciones.crearArchivo(nombreArchivo, nombreArchivo.length);
         //Refresco de la tabla del algortimo de asignacion
         onRefresh();
     }
@@ -66,6 +74,13 @@
      * Metodo que llama al metodo de la logica que elimina un archivo
      */
     const eliminarArchivo = () => {
+        // Variable auxiliar 
+        let nombreArchivoClone = nombreArchivo.trim();  
+
+        // Valida que la palabra no este vacia
+        if (nombreArchivoClone == "") {          
+            return alert("Ingrese palabra a eliminar");
+        }
         //Llamado al metodo de la logica que elimina un archivo
         funciones.eliminarArchivo(nombreArchivo, tamañoCaracteres);
         //Refresco de la tabla del algortimo de asignacion
@@ -216,7 +231,8 @@
                     value={nombreArchivo}
                     placeholder="Nombre del Archivo"
                     style={styles.input}
-                    keyboardType='default' 
+                    keyboardType='default'
+                    clearButtonMode="always"
                 />
                 <TextI
                     onChangeText={(val) => settamañoCaracteres(val)}
