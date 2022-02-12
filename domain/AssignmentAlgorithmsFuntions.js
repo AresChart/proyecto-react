@@ -574,11 +574,11 @@ export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
     //Indica cantidad de bloques totales que consume el archivo a crear.
     let bloquesTotales    = bloquesNecesarios + bloquesIndices;
     //Indica cantidad de caracteres que faltan por asignar
-    let cantidad = tamaño;
+    let cantidad          = tamaño;
     //Valida si hay espacio para guardar el archivo
-    let validacion = validarEspacioIndexadaEnlazada(tamaño, bloquesTotales);
+    let validacion        = validarEspacioIndexadaEnlazada(tamaño, bloquesTotales);
     // Inidcador de la palabra
-    let indicador = 0;
+    let indicador         = 0;
 
     //Revisa que la validacion sea positiva
     if (validacion != -1) {
@@ -605,23 +605,33 @@ export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
                 
             }
 
+            // Indica bloques consumidos
             let aux = bloquesIndices;
+            // Indica tope de bloques para asignar
             let tope = 1;
+
+            // Recorre los bloques destinados para los indices
             for (let index = 0; index < bloquesIndices; index++){
                 //Bucle que recorre cada posicion de los bloques
                 for (let index2 = 0; index2 < mapaIndexadaEnlazada[0].length; index2++) {
-                    //
+                    // Valida si es la ultima posicion del bloque de memoria
                     if (index2 == mapaIndexadaEnlazada[0].length-1) {
-
-                        if (tope < bloquesIndices) {  
+                        // Valida que no se pase de los bloques asignados para los indices
+                        if (tope < bloquesIndices) {
+                            // Ingresa registro al log
+                            logIndexadaEnlazada += ` Enlaza al bloque de indices ${posicionesDisponible[tope]+1} \n`;
+                            // Realiza la asignacion de los datos
                             mapaIndexadaEnlazada[posicionesDisponible[index]][index2] = posicionesDisponible[tope]+1;
                             tope++;
                         }     
                     }
+                    // Valida que no sea la ultima posicion del bloque de memoria
                     if (index2 != mapaIndexadaEnlazada[0].length-1) {
-                        
+                        // Valida si es el ultimo bloque de memoria
                         if (aux < posicionesDisponible.length) {
-                            
+                            // Ingresa registro al log
+                            logIndexadaEnlazada += ` En el bloque de memoria ${posicionesDisponible[index]+1} asigna en el espacio ${index2+1} que se consumió el bloque ${posicionesDisponible[aux]+1} \n`;
+                            // Realiza la asignacion de los datos
                             mapaIndexadaEnlazada[posicionesDisponible[index]][index2] = posicionesDisponible[aux]+1;
                             aux++;
                         }
@@ -637,7 +647,6 @@ export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
             inicioIndexadaEnlazada.push(validacion);
             //Ingresa las posiciones ocupadas por el archivo
             posicionesIndexadaEnlazada.push(posicionesDisponible);
-            
 
         } else {
             // Ingresa registro al log
@@ -645,7 +654,7 @@ export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
             console.log("Espacio no encontrado");
         }
 
-    }else{
+    } else {
         // Ingresa registro al log
         logIndexadaEnlazada += ` Se notifica que no se encontró espacio para guardar la palabra \n`;
         console.log("No hay espacio");
@@ -661,22 +670,24 @@ export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
     // console.log(inicioIndexadaEnlazada);
     // console.log("Posiciones (IndexadaEnlazada)");
     // console.log(posicionesIndexadaEnlazada);
-    console.log("Log");
-    console.log(logIndexadaEnlazada);
+    // console.log("Log");
+    // console.log(logIndexadaEnlazada);
 }
 
- /**
-  * Metodo sirve para saber las posiciones de los bloques vacios
-  * @param {*} bloquesTotales Cantidad de bloques vacios que se necesitan
-  * @returns Retorna un array con posiciones de bloques vacios. -1 si no se encuentran.
-  */
- function posicionesDisponiblesEnlazada(bloquesTotales) {
+/**
+ * Encuentra las posiciones disponibles para almacenar la palabra en disco
+ *
+ * @param {*} bloquesTotales Cantidad de bloques vacios que se necesitan
+ *
+ * @returns Retorna un array con posiciones de bloques vacios. -1 si no se encuentran.
+ */
+function posicionesDisponiblesEnlazada(bloquesTotales) {
 
     //Array que alamacena los indices de los bloques disponibles
     let posiciones = new Array();
 
-     //Bucle  que recorre el mapa de bits en busca de espacio disponible
-     for (let index = 0; index < mapaIndexadaEnlazada.length; index++) {
+        //Bucle  que recorre el mapa de bits en busca de espacio disponible
+        for (let index = 0; index < mapaIndexadaEnlazada.length; index++) {
         //Si encuentra un bloque vacio lo agrega en el array
         if (mapaIndexadaEnlazada[index][0] == "") {
             //agrega a la array la posicion del bloque vacio
@@ -686,7 +697,6 @@ export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
         if (posiciones.length == bloquesTotales) {
             break;
         }
-        
     }
 
     //Valida que se cumplan los bloques necesarios
@@ -696,17 +706,19 @@ export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
     else{
         return -1;
     }
-     
- }
+}
 
 /**
-* Valida si se puede agregar el archivo que se quiere crear
-* @param {*} tamaño tamaño de caracteres que tiene el archivo
-* @param {*} bloquesNecesarios  tamaño de bloques necesarios para almacenar el archivo
-* @returns El valor de la posicion de inicio para agregar el archivo si se puede agregar.
-*          Si no se puede agregar retorna -1
-*/
+ * Valida si se puede agregar el archivo que se quiere crear
+ * @param {*} tamaño tamaño de caracteres que tiene el archivo
+ * @param {*} bloquesNecesarios  tamaño de bloques necesarios para almacenar el archivo
+ * @returns El valor de la posicion de inicio para agregar el archivo si se puede agregar.
+ *          Si no se puede agregar retorna -1
+ */
 function validarEspacioIndexadaEnlazada(tamaño, bloquesNecesarios) {
+
+    // Ingresa registro al log
+    logIndexadaEnlazada += ` Se valida si hay espacio para almacenar la palabra en disco \n`;
 
     //Variable que permite saber si la cantidad de bloques que se necesita se encuentra
     let contador = 0;
@@ -727,7 +739,6 @@ function validarEspacioIndexadaEnlazada(tamaño, bloquesNecesarios) {
         if (contador == bloquesNecesarios) {
             return centinela;
         }
-        
     }
 
     //Valida que no exista el espacio
@@ -736,7 +747,6 @@ function validarEspacioIndexadaEnlazada(tamaño, bloquesNecesarios) {
     }
 
     return centinela;
-    
 }
 
 /**
@@ -753,11 +763,14 @@ function validarEspacioIndexadaEnlazada(tamaño, bloquesNecesarios) {
     
     //Valida que si exista un archivo creado con ese nombre
     if (validarArchivo != -1) {
+        // Ingresa registro al log
+        logIndexadaEnlazada += ` Según los indices, se procede a poner en mapa de bits disponibles los bloques ocupados por la palabra \n`;
         //Bucle que recorre las posiciones con los bloques ocupados por el archivo
         for (let index = 0; index < eliminar.length; index++) {
             //Setea en vacio el bloque
             mapaIndexadaEnlazada[eliminar[index]] = ["","",""];
-            
+            // Ingresa registro al log
+            logIndexadaEnlazada += ` Se libera el bloque ${eliminar[index]+1} \n`;
         }
 
         //Elimina los datos del archivo a eliminar del arreglo de archivos creados
@@ -769,22 +782,24 @@ function validarEspacioIndexadaEnlazada(tamaño, bloquesNecesarios) {
         //Elimina las posiciones ocupadas por el archivo
         posicionesIndexadaEnlazada.splice(validarArchivo,1)
     }else{
+        // Ingresa registro al log
+        logIndexadaEnlazada += ` Se notifica que la palabra a eliminar no existe \n`;
         console.log("No se existe el archivo que quiere eliminar");
     }
 
-    /** 
-    console.log("mapa (IndexadaEnlazada)");
-    console.log(mapaIndexadaEnlazada);
-    console.log("archivos (IndexadaEnlazada)");
-    console.log(archivosCreadosIndexadaEnlazada);
-    console.log("tamaños (IndexadaEnlazada)");
-    console.log(tamañoCaracteresIndexadaEnlazada);
-    console.log("inicio (IndexadaEnlazada)");
-    console.log(inicioIndexadaEnlazada);
-    console.log("posiciones disponibles (IndexadaEnlazada)");
-    console.log(posicionesIndexadaEnlazada);
-    */
-  
+    // console.log("mapa (IndexadaEnlazada)");
+    // console.log(mapaIndexadaEnlazada);
+    // console.log("archivos (IndexadaEnlazada)");
+    // console.log(archivosCreadosIndexadaEnlazada);
+    // console.log("tamaños (IndexadaEnlazada)");
+    // console.log(tamañoCaracteresIndexadaEnlazada);
+    // console.log("inicio (IndexadaEnlazada)");
+    // console.log(inicioIndexadaEnlazada);
+    // console.log("posiciones disponibles (IndexadaEnlazada)");
+    // console.log(posicionesIndexadaEnlazada);
+    // console.log("Log");
+    // console.log(logIndexadaEnlazada);
+
 }
 
 /**
@@ -793,6 +808,9 @@ function validarEspacioIndexadaEnlazada(tamaño, bloquesNecesarios) {
  * @returns indice del archivo. -1 Si no lo encuentra
  */
 function validarArchivoIndexadaEnlazada (nombre) {
+
+    // Ingresa registro al log
+    logIndexadaEnlazada += ` Se valida que la palabra a eliminar exista \n`;
 
     //Bucle que recorre el arry de archivos creados
     for (let index = 0; index < archivosCreadosIndexadaEnlazada.length; index++) {
