@@ -1024,8 +1024,8 @@ export function crearArchivoIndexadaMultinivel(nombre, tamaño) {
   * @param {*} tamaño tamaño de caracteres del archivo
   * @returns array con las posiciones vacias, -1 si no se encuentra el espacio
   */
- function validarEspacioIndexadaMultinivel(tamaño) {
-     
+function validarEspacioIndexadaMultinivel(tamaño) {
+    
     //Indica cuantos bloques se requieren para almacenar el archivo
     let bloquesNecesariosDatos = Math.ceil(tamaño/(tamañoBloque));
     //Indica la cantidad de bloques indices que se requieren para los bloques de datos
@@ -1081,7 +1081,7 @@ export function crearArchivoIndexadaMultinivel(nombre, tamaño) {
         //Retorna el -1 que indica que no hay espacio
         return -1;
     }
- }
+}
 
 /**
  * Metodo que elimina un archivo indicado en el algortimos Indexada-Multinivel
@@ -1117,6 +1117,8 @@ function eliminarArchivoIndexadaMultinivel (nombre, tamaño) {
         //Elimina las posiciones ocupadas por el archivo
         posicionesIndexadaMultinivel.splice(validarArchivo,1)
     }else{
+        // Ingresa registro al log
+        logIndexadaMultinivel += ` Se notifica que el mensaje a eliminar no existe en memoria. \n`;
         console.log("No se existe el archivo que quiere eliminar (indexada-multinivel)");
     }
 
@@ -1130,8 +1132,8 @@ function eliminarArchivoIndexadaMultinivel (nombre, tamaño) {
     // console.log(inicioIndexadaMultinivel);
     // console.log("Posiciones (Indexada-Multinivel)");
     // console.log(posicionesIndexadaMultinivel);
-    console.log("Log");
-    console.log(logIndexadaMultinivel);
+    // console.log("Log");
+    // console.log(logIndexadaMultinivel);
 
 }
 
@@ -1159,8 +1161,10 @@ function validarArchivoIndexadaMultinivel (nombre) {
  * @param {*} nombre Nombre del archivo a crear
  * @param {*} tamaño Tamaño del archivo a crear
  */
-  export function crearArchivoIndexadaCombinada(nombre, tamaño) {
+export function crearArchivoIndexadaCombinada(nombre, tamaño) {
 
+    // Ingresa registro al log
+    logIndexadaCombinada += ` Se valida que exista espacio para almacenar el mensaje. \n`;
     //Valida si existe el espacio para almacenar el archivo
     let validacion = validarEspacioIndexadaCombinada(tamaño);
     //Indica la cantidad de datos que faltan por asignar
@@ -1184,33 +1188,38 @@ function validarArchivoIndexadaMultinivel (nombre) {
         posicionesIndexadaCombinada.push(validacion);
         
     }else{
+        // Ingresa registro al log
+        logIndexadaCombinada += ` Se notifica que no existe espacio suficiente para ingresar el mensaje. \n`;
         console.log("No hay espacio suficiente para almacenar el archivo (Indexada-Multinivel)");
     }
 
-    /** 
-    console.log("mapa (Indexada-Combinada)");
-    console.log(mapaIndexadaMultinivel);
-    console.log("archivos (Indexada-Combinada)");
-    console.log(archivosCreadosIndexadaMultinivel);
-    console.log("tamaños (Indexada-Combinada)");
-    console.log(tamañoCaracteresIndexadaMultinivel);
-    console.log("inicio (Indexada-Combinada)");
-    console.log(inicioIndexadaMultinivel);
-    console.log("Posiciones (Indexada-Combinada)");
-    console.log(posicionesIndexadaMultinivel);
+    // console.log("mapa (Indexada-Combinada)");
+    // console.log(mapaIndexadaMultinivel);
+    // console.log("archivos (Indexada-Combinada)");
+    // console.log(archivosCreadosIndexadaMultinivel);
+    // console.log("tamaños (Indexada-Combinada)");
+    // console.log(tamañoCaracteresIndexadaMultinivel);
+    // console.log("inicio (Indexada-Combinada)");
+    // console.log(inicioIndexadaMultinivel);
+    // console.log("Posiciones (Indexada-Combinada)");
+    // console.log(posicionesIndexadaMultinivel);
+    console.log("Log");
+    console.log(logIndexadaCombinada);
 
-    */
- }
+}
 
 /**
- * Metodo que realiza eñ ingreso de datos en su primera parte  
+ * Metodo que realiza eñ ingreso de datos en su primera parte
+ *
  * @param {*} nombre Nombre del archivo a crear
  * @param {*} indice Indice actual del array de posciones
  * @param {*} array Array de posiciones disponibles
  * @param {*} faltantes Cantidad de datos faltantes por asignar
  */
- function tipo1(nombre, indice, array, faltantes, indicador) {
-    
+function tipo1(nombre, indice, array, faltantes, indicador) {
+
+    // Ingresa registro al log
+    logIndexadaCombinada += ` Se toma el bloque ${array[indice]+1} como super i nodo. \n`;
     // Nodo de indices
     let inodo = array[indice];
     // Asignacion al puntero siguiente
@@ -1218,17 +1227,21 @@ function validarArchivoIndexadaMultinivel (nombre) {
     // Aumento del indice
     indice++;
 
-    // Bucle
+    // Ingresa registro al log
+    logIndexadaCombinada += ` Se enlaza en el super i nodo el bloque de datos ${array[indice+1]}. \n`;
+    // Ingresa registro al log
+    logIndexadaCombinada += ` Se ingresan datos en el bloque ${array[indice+1]}. \n`;
+    
+    // Bucle que recorre el bloque de datos para el ingreso del mensaje
     for (let index1 = 0; index1 < mapaIndexadaCombinada[0].length; index1++) {
-        
+        // Valida si ya se ingreso todo el archivo
         if (faltantes == 0) {
             break;
-        }else{
+        } else {
             mapaIndexadaCombinada[array[indice]][index1] = nombre.charAt(indicador);
             faltantes--;
             indicador++;
         }
-        
     }
     // Valida si faltan campos para completar la palabra
     if (faltantes != 0) {
@@ -1236,13 +1249,15 @@ function validarArchivoIndexadaMultinivel (nombre) {
         // Sigue con el recorrido 2
         tipo2(nombre, indice, array, faltantes, inodo, indicador);
     }
-
- }
+}
 
 /**
  * Recorre en forma 2 el algoritmo
  */
 function tipo2(nombre, indice, array, faltantes, inodo, indicador) {
+
+    // Ingresa registro al log
+    logIndexadaCombinada += ` Se enlaza en el super i nodo el bloque de indices ${array[indice]+1}. \n`;
     // Incializa inodo
     mapaIndexadaCombinada[inodo][1] = array[indice]+1;
     // Iniciliza el tope
@@ -1252,11 +1267,16 @@ function tipo2(nombre, indice, array, faltantes, inodo, indicador) {
     indice++;
     // Recorre los bloques de memoria
     while (tope != 3) {
-        
+        // Ingresa registro al log
+        logIndexadaCombinada += ` Se enlaza en el bloque de indices el bloque de datos ${array[indice]+1}. \n`;
+        // Se asigna en bloque de indice el indice que se va a consumir
         mapaIndexadaCombinada[nodoIndice][tope] = array[indice]+1;
 
+        // Ingresa registro al log
+        logIndexadaCombinada += ` Se asignan datos en el bloque de datos ${array[indice]+1}. \n`;
+        // Recorre el bloque de datos para asignar
         for (let index = 0; index < mapaIndexadaCombinada[0].length; index++) {
-            
+            // Valida si se completo la insercion del mensaje
             if (faltantes == 0) {
                 break;
             }else{
@@ -1264,7 +1284,6 @@ function tipo2(nombre, indice, array, faltantes, inodo, indicador) {
                 faltantes--;
                 indicador++;
             }
-            
         }
         // Valida si ingreso la palabra completa
         if (faltantes == 0) {
@@ -1286,22 +1305,23 @@ function tipo2(nombre, indice, array, faltantes, inodo, indicador) {
 /**
  * Forma 3 de recorrer el algoritmo
  */
- function tipo3(nombre, indice, array, faltantes, inodo, indicador) {
+function tipo3(nombre, indice, array, faltantes, inodo, indicador) {
+    // Ingresa registro al log
+    logIndexadaCombinada += ` Se enlaza en el super inodo ${inodo+1} el siguiente super inodo ${array[indice]+1}. \n`;
     // Asigna dato
     mapaIndexadaCombinada[inodo][2] = array[indice]+1;
     //indice++;
     // Pasa al recorrido 1
     tipo1(nombre, indice, array, faltantes, indicador);
+}
 
- }
-
- /**
-  * Metodo que valida si hay espacio para almacenar el archivo
-  * @param {*} tamaño tamaño de caracteres del archivo
-  * @returns array con las posiciones vacias, -1 si no se encuentra el espacio
-  */
- function validarEspacioIndexadaCombinada(tamaño) {
-     
+/**
+ * Metodo que valida si hay espacio para almacenar el archivo
+ * @param {*} tamaño tamaño de caracteres del archivo
+ * @returns array con las posiciones vacias, -1 si no se encuentra el espacio
+ */
+function validarEspacioIndexadaCombinada(tamaño) {
+    
     //Indica cuantos bloques se requieren para almacenar el archivo
     let bloquesNecesariosDatos = Math.ceil(tamaño/(tamañoBloque));
     //Indica la cantidad de bloques indices que se requieren para los bloques de datos
@@ -1365,8 +1385,7 @@ function tipo2(nombre, indice, array, faltantes, inodo, indicador) {
         //Retorna el -1 que indica que no hay espacio
         return -1;
     }
-
- }
+}
 
 /**
  * Metodo que elimina un archivo indicado en el algortimos Indexada-Multinivel
@@ -1375,10 +1394,17 @@ function tipo2(nombre, indice, array, faltantes, inodo, indicador) {
  */
 function eliminarArchivoIndexadaCombinada (nombre, tamaño) {
 
+    // Ingresa registro al log
+    logIndexadaCombinada += ` Se valida que el mensaje a eliminar este en memoria. \n`;
+
     //Variable que almacena el resultado de la validacion
     let validarArchivo = validarArchivoIndexadaCombinada(nombre);
     //Arreglo con posiciones ocupadas por el archivo
     let eliminar = posicionesIndexadaCombinada[validarArchivo];
+
+    // Ingresa registro al log
+    logIndexadaCombinada += ` Se recorren los indices utilizados para almacenar el mensaje, y se ponen en mapa de bits como disponibles. \n`;
+
     //Valida que si exista un archivo creado con ese nombre
     if (validarArchivo != -1) {
         //Bucle que recorre las posiciones con los bloques ocupados por el archivo
@@ -1397,21 +1423,25 @@ function eliminarArchivoIndexadaCombinada (nombre, tamaño) {
         //Elimina las posiciones ocupadas por el archivo
         posicionesIndexadaCombinada.splice(validarArchivo,1)
     }else{
+        // Ingresa registro al log
+        logIndexadaCombinada += ` Se nortifica que no existe el mensaje a eliminar en disco. \n`;
+
         console.log("No se existe el archivo que quiere eliminar (indexada-Combinada)");
     }
 
-    ///** 
-    console.log("mapa (Indexada-Combinada)");
-    console.log(mapaIndexadaCombinada);
-    console.log("archivos (Indexada-Combinada)");
-    console.log(archivosCreadosIndexadaCombinada);
-    console.log("tamaños (Indexada-Combinada)");
-    console.log(tamañoCaracteresIndexadaCombinada);
-    console.log("inicio (Indexada-Combinada)");
-    console.log(inicioIndexadaCombinada);
-    console.log("Posiciones (Indexada-Combinada)");
-    console.log(posicionesIndexadaCombinada);
-    //*/ 
+    // console.log("mapa (Indexada-Combinada)");
+    // console.log(mapaIndexadaCombinada);
+    // console.log("archivos (Indexada-Combinada)");
+    // console.log(archivosCreadosIndexadaCombinada);
+    // console.log("tamaños (Indexada-Combinada)");
+    // console.log(tamañoCaracteresIndexadaCombinada);
+    // console.log("inicio (Indexada-Combinada)");
+    // console.log(inicioIndexadaCombinada);
+    // console.log("Posiciones (Indexada-Combinada)");
+    // console.log(posicionesIndexadaCombinada);
+    console.log("Log");
+    console.log(logIndexadaCombinada);
+ 
 }
 
  /**

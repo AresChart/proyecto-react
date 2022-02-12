@@ -23,7 +23,7 @@
     //Variable que almacena el tamaño de caracteres del archivo a crear
     const [tamañoCaracteres,   settamañoCaracteres] = React.useState(5);
     //Variable que identifica el Tipo de algortimo a proyectar
-    const [algoritmo, setAlgoritmo]                 = React.useState("Indexada-Multinivel");
+    const [algoritmo, setAlgoritmo]                 = React.useState("Indexada-Combinada");
     //Variable que acciona el refresco de la tabla
     const [refreshing, setRefreshing]               = React.useState(false);
     //Lista de los algortimos de asignacion de espacio
