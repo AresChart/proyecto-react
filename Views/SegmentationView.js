@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { View , ScrollView} from 'react-native';
+import NumberFormat from 'react-number-format';
+import { View , ScrollView, TextInput} from 'react-native';
 import * as funciones from '../domain/SegmentationFuntions';
 import ButtonA from '../componentes/ButtonComponent';
 import TextI from '../componentes/TextInputComponent';
@@ -39,6 +40,13 @@ function segmentation() {
      */
     const wait = (timeout) => {
         return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+
+    function onChange(e){
+        const re = /^[0-9\b]+$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+           this.setState({value: e.target.value})
+        }
     }
 
     /**
@@ -128,17 +136,31 @@ function segmentation() {
             </View>
             {/**View de los Input pagina y posicion solicitada*/}
             <View>
-                <TextI
-                    onChangeText={(val) => setSegmentoSolicitado(val)}
+                <NumberFormat
                     value={segmentoSolicitado}
-                    placeholder="Índice de segmento"
-                    keyboardType='default' 
+                    displayType={'text'}
+                    renderText={ (segmentoSolicitado) => (
+                        <TextInput
+                            underlineColorAndroid="transparent"
+                            onChangeText={(val) => setSegmentoSolicitado(val)}
+                            value={segmentoSolicitado}
+                            placeholder="Índice de segmento"
+                            keyboardType="numeric"
+                        />
+                    )}
                 />
-                <TextI
-                    onChangeText={(val) => setPosicionSolicitada(val)}
+                <NumberFormat
                     value={posicionSolicitada}
-                    placeholder="Posicion"
-                    keyboardType='default' 
+                    displayType={'text'}
+                    renderText={ (posicionSolicitada) => (
+                        <TextInput
+                            underlineColorAndroid="transparent"
+                            onChangeText={(val) => setPosicionSolicitada(val)}
+                            value={posicionSolicitada}
+                            placeholder="Posicion a solicitar"
+                            keyboardType="numeric"
+                        />
+                    )}
                 />
             </View>
             {/**View del boton realizar solicitud */}
@@ -150,11 +172,18 @@ function segmentation() {
             </View>
             {/**View del input eliminar proceso - palabra con el indice*/}
             <View>
-                <TextI
-                    onChangeText={(val) => setEliminarItem(val)}
+                <NumberFormat
                     value={eliminarItem}
-                    placeholder="Índice del segmento a eliminar"
-                    keyboardType='default' 
+                    displayType={'text'}
+                    renderText={ (eliminarItem) => (
+                        <TextInput
+                            underlineColorAndroid="transparent"
+                            onChangeText={(val) => setEliminarItem(val)}
+                            value={eliminarItem}
+                            placeholder="Índice del segmento a eliminar"
+                            keyboardType="numeric"
+                        />
+                    )}
                 />
             </View>
             {/**View del boton eliminar proceso - palabra */}

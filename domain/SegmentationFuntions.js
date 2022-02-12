@@ -251,8 +251,9 @@ export function solicitarItem(segmento, indice) {
 
     // Ingresa registro al log
     logSegmentacion += ` Se valida que la posición solictada no exceda el tamaño del proceso. \n`;
+
     // Valida que la posicion solictada no exceda el tamaño del proceso
-    if (indice <= TablaDatos[segmento-1][0]) {        
+    if (indice <= TablaDatos[segmento-1][1]) {        
         // Calcula la posicion en la que se encuentra el item en memoria fisica
         let item = TablaDatos[segmento-1][0] + (indice-1);
         // Obtiene el item solicitado
