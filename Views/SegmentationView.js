@@ -85,13 +85,24 @@ function segmentation() {
      * Permite eliminar un proceso o segmento
      */
     function eliminarSegmento() {
+
+        // Variable auxiliar 
+        let eliminarClone = eliminarItem.trim();  
+
+        // Valida que la palabra no este vacia
+        if (eliminarClone == "") {          
+            return alert("Ingrese un segmento a eliminar");
+        }
+        // Valida que el segmento exista
+        if (eliminarItem > funciones.TablaProcesos.length) {
+            return alert('No existe el segmento a eliminar')
+        }
         // Invoca el metodo que elimina de los array la palabra indicada
         funciones.eliminarSegmento(eliminarItem);
         //Refresco de la tabla del algortimo de asignacion
         return onRefresh();
     }
       
-
     /**
      * Retorna la vista con los componentes
      */

@@ -16,9 +16,9 @@ const App = () => {
   return (
   
     //particionesView()
-    mapaBits()
+    //mapaBits()
     //pagination()
-    //segmentation()
+    segmentation()
 
   )
 }
