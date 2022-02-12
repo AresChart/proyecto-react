@@ -80,6 +80,12 @@ var tamañoBloque = 3;
  * @param {*} tamaño Tamaño en caracteres del archivo a Crear
  */
 export function crearArchivo(nombre, tamaño) {
+    // Ingresa registro al log
+    logContigua += 'Se solicita agregar en disco la palabra: '+ nombre +'\n';
+    // Ingresa registro al log
+    logEnlazada += 'Se solicita agregar en disco la palabra: '+ nombre +'\n';
+    // Ingresa registro al log
+    logIndexadaEnlazada += `Se solicita agregar en disco la palabra: ${nombre}. \n`;
     //Llama a los metodos de creacion de archivos de los diferentes algortimos
     crearArchivoContigua(nombre, tamaño);
     crearArchivoEnlazada(nombre, tamaño);
@@ -94,7 +100,12 @@ export function crearArchivo(nombre, tamaño) {
  * @param {*} tamaño Tamaño en caracteres del archivo a eliminar
  */
 export function eliminarArchivo(nombre, tamaño) {
-
+    // Ingresa registro al log
+    logContigua += `Se solicta eliminar la palabra ${nombre}. \n`;
+    // Ingresa registro al log
+    logEnlazada += `Se solicta eliminar la palabra ${nombre}. \n`;
+    // Ingresa registro al log
+    logIndexadaEnlazada += `Se solicta eliminar la palabra ${nombre}. \n`;
     //Llama a los metodos de eliminacion de archivos de los diferentes algortimos
     eliminarArchivoContigua(nombre, tamaño);
     eliminarArchivoEnlazada(nombre, tamaño);
@@ -172,7 +183,7 @@ function eliminarArchivoContigua(nombre, tamaño) {
     // console.log("mapa (Contigua)");
     // console.log(mapaContigua);
     // console.log("Log");
-    console.log(logContigua);
+    // console.log(logContigua);
 }
 
 /**
@@ -203,9 +214,6 @@ function validarArchivoContigua (nombre) {
  * @param {*} tamaño Tamaño del archivo a crear
  */
 export function crearArchivoContigua(nombre, tamaño) {
-
-    // Ingresa registro al log
-    logContigua += 'Se solicita agregar en disco la palabra: '+ nombre +'\n';
 
     //Varible con el calculo de cuantos bloques se necesitan para crear el archivo
     let bloquesNecesarios = Math.ceil(tamaño/tamañoBloque);
@@ -274,8 +282,8 @@ export function crearArchivoContigua(nombre, tamaño) {
     // console.log(tamañoCaracteresContigua);
     // console.log("inicio (Contigua)");
     // console.log(inicioContigua);
-    console.log('log');
-    console.log(logContigua);
+    // console.log('log');
+    // console.log(logContigua);
     
     
     
@@ -356,19 +364,8 @@ function validarEspacioContigua(tamaño, bloquesNecesarios) {
         for (let index = validacion; index < mapaEnlazada.length; index++) {
             //Valida si el bloque esta vacio y existan caracteres por asignar
             if (mapaEnlazada[index][0] == "" && cantidad != 0) {
-                //Valida si el enlace no tiene valor positivo
-                if (siguiente != -1) {
-                    //Asigna el valor del enlace al siguiente bloque de datos
-                    mapaEnlazada[siguiente][2] = index+1;
-                    //Guarda el dato del bloque anterior para poder asignar el dato de enlace
-                    siguiente = index;
-                }
-                //Valida que sea el primer enlace que guarda
-                if (siguiente == -1) {
-                    //Guarda el dato del bloque anterior para poder asignar el dato de enlace
-                    siguiente = index;
-                }
-
+                // Ingresa registro al log
+                logEnlazada += ` Asigna datos de la palabra en el bloque ${index+1}. \n`;
                 //Bucle que recorre el bloque para asignar los datos 
                 for (let index1 = 0; index1 < (mapaEnlazada[0].length-1); index1++) {
                     //Valida que el tamaño no sea 0
@@ -381,14 +378,27 @@ function validarEspacioContigua(tamaño, bloquesNecesarios) {
                     //Valida que no existan mas caracteres que asignar.
                     if (cantidad == 0) {
                         break;
-                    }
-                            
+                    }       
                 }
-
+                //Valida si el enlace no tiene valor positivo
+                if (siguiente != -1) {
+                    //Asigna el valor del enlace al siguiente bloque de datos
+                    mapaEnlazada[siguiente][2] = index+1;
+                    // Ingresa registro al log
+                    logEnlazada += ` Asigna al bloque anterior en la última posición, el enlace al bloque actual. \n`;
+                    //Guarda el dato del bloque anterior para poder asignar el dato de enlace
+                    siguiente = index;
+                }
+                //Valida que sea el primer enlace que guarda
+                if (siguiente == -1) {
+                    //Guarda el dato del bloque anterior para poder asignar el dato de enlace
+                    siguiente = index;
+                }
             }
-           
         }
 
+        // Ingresa registro al log
+        logEnlazada += ` Pone en el mapa de bits los bloques consumidos en ocupados. \n`;
         //Ingresa el archivo en el arreglo de archivos creados
         archivosCreadosEnlazada.push(nombre);
         //Ingresa el tamaño del archivo en el arreglo de tamaños de archivos creados
@@ -397,20 +407,21 @@ function validarEspacioContigua(tamaño, bloquesNecesarios) {
         inicioEnlazada.push(validacion);
 
     }else{
+        // Ingresa registro al log
+        logEnlazada += ` No hay espacio disponible para almacenar la palabra. \n`;
         console.log("No hay espacio suficiente");
     }
-
-    /** 
-    console.log("mapa (Enlazada)");
-    console.log(mapaEnlazada);
-    console.log("creados (Enlazada)");
-    console.log(archivosCreadosEnlazada);
-    console.log("tamaño (Enlazada)");
-    console.log(tamañoCaracteresEnlazada);
-    console.log("inicio (Enlazada)");
-    console.log(inicioEnlazada);
-    */
     
+    // console.log("mapa (Enlazada)");
+    // console.log(mapaEnlazada);
+    // console.log("creados (Enlazada)");
+    // console.log(archivosCreadosEnlazada);
+    // console.log("tamaño (Enlazada)");
+    // console.log(tamañoCaracteresEnlazada);
+    // console.log("inicio (Enlazada)");
+    // console.log(inicioEnlazada);
+    // console.log("Log");
+    // console.log(logEnlazada);   
 }
 
 /**
@@ -421,8 +432,9 @@ function validarEspacioContigua(tamaño, bloquesNecesarios) {
 *          Si no se puede agregar retorna -1
 */
 function validarEspacioEnlazada(tamaño, bloquesNecesarios) {
+    // Ingresa registro al log
+    logEnlazada += ` Se valida si existe espacio para almacenar la palabar en disco. \n`;
 
-    //console.log("Bloques"+ bloquesNecesarios);
     //Variable que permite saber si la cantidad de bloques que se necesita se encuentra
     let contador = 0;
     //Valor a retornan
@@ -477,12 +489,16 @@ function validarEspacioEnlazada(tamaño, bloquesNecesarios) {
         for (let index = 0; index <= bloquesNecesarios; index++) {
             //Valida que exista un enlace a otro bloque para guardar ese dato
             if (mapaEnlazada[indice][2] != "") {
+                // Ingresa registro al log
+                logEnlazada += ` En mapa de bits se pone disponible el bloque ${indice+1}. \n`;
                 //Se guarda del valor del siguiente bloque con datos del archivo
                 siguiente = mapaEnlazada[indice][2]-1;
                 //Se setea en vacio para eliminar los datos
                 mapaEnlazada[indice] = ["","",""];
                 //Se asigna el indice del bloque siguiente con datos del archivo
                 indice = siguiente;
+                // Ingresa registro al log
+                logEnlazada += ` Se obtiene el enlace al bloque ${indice + 1}, que es el siguiente. \n`;
             }
             //Valida si es el ultimo bloque con datos del archivo
             if (mapaEnlazada[indice][2] == "" && mapaEnlazada[indice][0] != "") {
@@ -491,6 +507,8 @@ function validarEspacioEnlazada(tamaño, bloquesNecesarios) {
             }
 
         }
+        // Ingresa registro al log
+        logEnlazada += ` En mapa de bits se pone disponible el bloque ${indice+1}. \n`;
 
         //Elimina los datos del archivo a eliminar del arreglo de archivos creados
         archivosCreadosEnlazada.splice(validarArchivo,1);
@@ -499,18 +517,20 @@ function validarEspacioEnlazada(tamaño, bloquesNecesarios) {
         //Elimina los datos del archivo a eliminar del arreglo de posicion inicial del archivo
         inicioEnlazada.splice(validarArchivo,1);
 
-        /** 
-        console.log("mapa (Enlazada)");
-        console.log(mapaEnlazada);
-        console.log("archivos (Enlazada)");
-        console.log(archivosCreadosEnlazada);
-        console.log("tamaño (Enlazada)");
-        console.log(tamañoCaracteresEnlazada);
-        console.log("Inicio (Enlazada)");
-        console.log(inicioEnlazada);
-        */
+        // console.log("mapa (Enlazada)");
+        // console.log(mapaEnlazada);
+        // console.log("archivos (Enlazada)");
+        // console.log(archivosCreadosEnlazada);
+        // console.log("tamaño (Enlazada)");
+        // console.log(tamañoCaracteresEnlazada);
+        // console.log("Inicio (Enlazada)");
+        // console.log(inicioEnlazada);
+        // console.log("log");
+        // console.log(logEnlazada);
 
     }else{
+        // Ingresa registro al log
+        logEnlazada += ` Se notifica que la palabra no existe en disco. \n`;
         console.log("No existe el archivo que quiere eliminar");
     }
 
@@ -524,7 +544,8 @@ function validarEspacioEnlazada(tamaño, bloquesNecesarios) {
  * @returns indice del archivo. -1 Si no lo encuentra
  */
 function validarArchivoEnlazada (nombre) {
-
+    // Ingresa registro al log
+    logEnlazada += ` Se valida que exista la palabra que se quiere eliminar \n`;
     //Bucle que recorre el arry de archivos creados
     for (let index = 0; index < archivosCreadosEnlazada.length; index++) {
         //Valida si el nombre coincide con el que se busca
@@ -544,7 +565,7 @@ function validarArchivoEnlazada (nombre) {
  * @param {*} nombre Nombre del archivo a crear
  * @param {*} tamaño Tamaño del archivo a crear
  */
- export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
+export function crearArchivoIndexadaEnlazada(nombre, tamaño) {
 
     //Indica cuantos bloques se requieren para almacenar el archivo
     let bloquesNecesarios = Math.ceil(tamaño/(tamañoBloque));
@@ -558,6 +579,7 @@ function validarArchivoEnlazada (nombre) {
     let validacion = validarEspacioIndexadaEnlazada(tamaño, bloquesTotales);
     // Inidcador de la palabra
     let indicador = 0;
+
     //Revisa que la validacion sea positiva
     if (validacion != -1) {
         //Devuelve las posiciones de los bloques vacios
@@ -599,14 +621,12 @@ function validarArchivoEnlazada (nombre) {
                     if (index2 != mapaIndexadaEnlazada[0].length-1) {
                         
                         if (aux < posicionesDisponible.length) {
-                           
+                            
                             mapaIndexadaEnlazada[posicionesDisponible[index]][index2] = posicionesDisponible[aux]+1;
                             aux++;
                         }
-
                     }
                 }
-
             }
 
             //Ingresa el archivo en el arreglo de archivos creados
@@ -617,30 +637,33 @@ function validarArchivoEnlazada (nombre) {
             inicioIndexadaEnlazada.push(validacion);
             //Ingresa las posiciones ocupadas por el archivo
             posicionesIndexadaEnlazada.push(posicionesDisponible);
-           
+            
 
-        }else{
+        } else {
+            // Ingresa registro al log
+            logIndexadaEnlazada += ` Se notifica que no se encontró espacio para guardar la palabra \n`;
             console.log("Espacio no encontrado");
         }
 
     }else{
+        // Ingresa registro al log
+        logIndexadaEnlazada += ` Se notifica que no se encontró espacio para guardar la palabra \n`;
         console.log("No hay espacio");
     }
 
-    /** 
-    console.log("mapa (IndexadaEnlazada)");
-    console.log(mapaIndexadaEnlazada);
-    console.log("archivos (IndexadaEnlazada)");
-    console.log(archivosCreadosIndexadaEnlazada);
-    console.log("tamaños (IndexadaEnlazada)");
-    console.log(tamañoCaracteresIndexadaEnlazada);
-    console.log("inicio (IndexadaEnlazada)");
-    console.log(inicioIndexadaEnlazada);
-    console.log("Posiciones (IndexadaEnlazada)");
-    console.log(posicionesIndexadaEnlazada);
-    */
-
- }
+    // console.log("mapa (IndexadaEnlazada)");
+    // console.log(mapaIndexadaEnlazada);
+    // console.log("archivos (IndexadaEnlazada)");
+    // console.log(archivosCreadosIndexadaEnlazada);
+    // console.log("tamaños (IndexadaEnlazada)");
+    // console.log(tamañoCaracteresIndexadaEnlazada);
+    // console.log("inicio (IndexadaEnlazada)");
+    // console.log(inicioIndexadaEnlazada);
+    // console.log("Posiciones (IndexadaEnlazada)");
+    // console.log(posicionesIndexadaEnlazada);
+    console.log("Log");
+    console.log(logIndexadaEnlazada);
+}
 
  /**
   * Metodo sirve para saber las posiciones de los bloques vacios
